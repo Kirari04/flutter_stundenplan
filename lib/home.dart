@@ -48,29 +48,34 @@ class _HomePageState extends State<HomePage> {
   String stingifyTime(DateTime input) => DateFormat("hh:mm").format(input);
 
   Widget iconTimex(DateTime start, DateTime end) {
+    double size = 16;
     DateTime now = DateTime.now();
     if (now.isBefore(start)) {
       // wait
-      return const Icon(
+      return Icon(
         Icons.timelapse_rounded,
         color: Colors.white,
+        size: size,
       );
     } else if (now.isAfter(start) && now.isBefore(end)) {
       //pending
-      return const Icon(
+      return Icon(
         Icons.pending_rounded,
         color: Colors.white,
+        size: size,
       );
     } else if (now.isAfter(end)) {
       //fin
-      return const Icon(
+      return Icon(
         Icons.done,
         color: Colors.white,
+        size: size,
       );
     } else {
-      return const Icon(
+      return Icon(
         Icons.error,
         color: Colors.white,
+        size: size,
       );
     }
   }
@@ -211,18 +216,34 @@ class _HomePageState extends State<HomePage> {
                 borderRadius: const BorderRadius.all(Radius.circular(4.0))),
             height: 40,
             width: 40,
-            child: Center(
-              child: ((datum.courseName != null)
-                  ? Text(
-                      datum.courseName.toString(),
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w600, color: Colors.white),
-                    )
-                  : const Icon(
-                      Icons.question_mark_rounded,
-                      color: Colors.white,
-                    )),
-            )),
+            child: Stack(clipBehavior: Clip.none, children: [
+              Center(
+                child: ((datum.courseName != null)
+                    ? Text(
+                        datum.courseName.toString(),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w600, color: Colors.white),
+                      )
+                    : const Icon(
+                        Icons.question_mark_rounded,
+                        color: Colors.white,
+                      )),
+              ),
+              Positioned(
+                  right: -10,
+                  bottom: -10,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                        color: Colors.black87,
+                        borderRadius: BorderRadius.all(Radius.circular(999))),
+                    padding: const EdgeInsets.all(5),
+                    child: iconTimex(
+                        parseTime(datum.lessonStart.toString(),
+                            datum.lessonDate.toString()),
+                        parseTime(datum.lessonEnd.toString(),
+                            datum.lessonDate.toString())),
+                  ))
+            ])),
         title: Row(children: [
           /**
                  * ROW TIME
@@ -269,7 +290,7 @@ class _HomePageState extends State<HomePage> {
                           child: Row(
                             children: [
                               Text(initials),
-                              Icon(
+                              const Icon(
                                 Icons.school_rounded,
                                 color: Colors.white,
                               )
@@ -277,11 +298,6 @@ class _HomePageState extends State<HomePage> {
                           )),
                     );
                   }),
-                  iconTimex(
-                      parseTime(datum.lessonStart.toString(),
-                          datum.lessonDate.toString()),
-                      parseTime(datum.lessonEnd.toString(),
-                          datum.lessonDate.toString())),
                 ],
               ))
         ]),
