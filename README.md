@@ -1,16 +1,29 @@
-# flutter_application_1
+# Klasse 2I Stundenplan
 
-A new Flutter project.
+## Build Application
 
-## Getting Started
+### Android
+```bash
+flutter build apk
+# or
+flutter build appbundle
+```
+[more](https://docs.flutter.dev/deployment/android)
 
-This project is a starting point for a Flutter application.
+### Linux
+```bash
+flutter build linux
+```
+[more](https://docs.flutter.dev/deployment/linux)
 
-A few resources to get you started if this is your first Flutter project:
+### Windows
+```bash
+flutter build windows
+```
+[more](https://docs.flutter.dev/deployment/windows)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### IOS
+```bash
+flutter build ipa
+```
+[more](https://docs.flutter.dev/deployment/ios)
