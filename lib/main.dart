@@ -49,15 +49,27 @@ class _MyAppState extends State<MyApp> {
     DateTime now = DateTime.now();
     if (now.isBefore(start)) {
       // wait
-      return const Icon(Icons.timelapse_rounded);
+      return const Icon(
+        Icons.timelapse_rounded,
+        color: Colors.white,
+      );
     } else if (now.isAfter(start) && now.isBefore(end)) {
       //pending
-      return const Icon(Icons.pending_rounded);
+      return const Icon(
+        Icons.pending_rounded,
+        color: Colors.white,
+      );
     } else if (now.isAfter(end)) {
       //fin
-      return const Icon(Icons.done);
+      return const Icon(
+        Icons.done,
+        color: Colors.white,
+      );
     } else {
-      return const Icon(Icons.error);
+      return const Icon(
+        Icons.error,
+        color: Colors.white,
+      );
     }
   }
 
@@ -113,29 +125,35 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Flutter Demo',
+        title: '2I Stundenplan',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
         home: Scaffold(
+          backgroundColor: Colors.black12,
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(50),
             child: AppBar(
-                title: Container(
-                    child: Row(
-              children: [
-                Expanded(flex: 1, child: Text(data.title)),
-                Expanded(
-                    flex: 0,
-                    child: Container(
-                      child: (isLoading == true)
-                          ? const CircularProgressIndicator(
-                              color: Colors.white,
-                            )
-                          : const SizedBox.shrink(),
-                    ))
-              ],
-            ))),
+                backgroundColor: Colors.black,
+                title: Row(
+                  children: [
+                    Expanded(
+                        flex: 1,
+                        child: Text(
+                          data.title,
+                          style: const TextStyle(color: Colors.white),
+                        )),
+                    Expanded(
+                        flex: 0,
+                        child: Container(
+                          child: (isLoading == true)
+                              ? const CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                              : const SizedBox.shrink(),
+                        ))
+                  ],
+                )),
           ),
           body: Container(
               alignment: Alignment.topLeft,
@@ -182,7 +200,6 @@ class _MyAppState extends State<MyApp> {
             int currentPause = 0;
             bool showPauseBefore = ((mapIndex * 2) - 1 < 0 ||
                     lessonTimes.length <= (mapIndex * 2) - 1 ||
-                    lessonTimes[(mapIndex * 2) - 1] == null ||
                     // check if dif between latest added... time & current ... time
                     // currentTimestamp - 6e+8 >
                     //     lessonTimes[(mapIndex * 2) - 1] ||
@@ -236,15 +253,29 @@ class _MyAppState extends State<MyApp> {
                   )),
               title: Row(children: [
                 /**
-                         * ROW TIME
-                         */
+                 * ROW TIME
+                 */
+                Expanded(
+                    flex: 0,
+                    child: Container(
+                      margin: const EdgeInsets.only(right: 10),
+                      child: Text(
+                        datum.roomName.toString(),
+                        style: const TextStyle(color: Colors.redAccent),
+                      ),
+                    )),
+                /**
+                 * ROW TIME
+                 */
                 Expanded(
                     flex: 1,
                     child: Text(
-                        "${stingifyTime(parseTime(datum.lessonStart.toString(), datum.lessonDate.toString()))} - ${stingifyTime(parseTime(datum.lessonEnd.toString(), datum.lessonDate.toString()))}")),
+                      "${stingifyTime(parseTime(datum.lessonStart.toString(), datum.lessonDate.toString()))} - ${stingifyTime(parseTime(datum.lessonEnd.toString(), datum.lessonDate.toString()))}",
+                      style: const TextStyle(color: Colors.white),
+                    )),
                 /**
-                         * ROW STATUS
-                         */
+                 * ROW STATUS
+                 */
                 Expanded(
                     flex: 0,
                     child: Row(
@@ -270,7 +301,7 @@ class _MyAppState extends State<MyApp> {
                             fontWeight: FontWeight.w600,
                             color: (isActiveDay == true)
                                 ? Colors.green
-                                : Colors.black),
+                                : Colors.white),
                       )),
                   listTile
                 ],
@@ -284,7 +315,8 @@ class _MyAppState extends State<MyApp> {
                       padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                       width: double.infinity,
                       child: Text(
-                        "${currentPause} min Pause",
+                        "$currentPause min Pause",
+                        style: const TextStyle(color: Colors.white),
                       )),
                   listTile
                 ],
