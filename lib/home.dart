@@ -246,8 +246,8 @@ class _HomePageState extends State<HomePage> {
             ])),
         title: Row(children: [
           /**
-                 * ROW TIME
-                 */
+           * ROW TIME
+           */
           Expanded(
               flex: 0,
               child: Container(
@@ -258,8 +258,8 @@ class _HomePageState extends State<HomePage> {
                 ),
               )),
           /**
-                 * ROW TIME
-                 */
+           * ROW TIME
+           */
           Expanded(
               flex: 1,
               child: Text(
@@ -267,11 +267,11 @@ class _HomePageState extends State<HomePage> {
                 style: const TextStyle(color: Colors.white),
               )),
           /**
-                 * ROW STATUS
-                 */
+           * ROW Functions
+           */
           Expanded(
               flex: 0,
-              child: Row(
+              child: Column(
                 children: [
                   ...datum.teacherId!.map((teacherId) {
                     String teachersFullName = datum
@@ -282,7 +282,7 @@ class _HomePageState extends State<HomePage> {
                         .join("")
                         .toUpperCase();
                     return Container(
-                      margin: const EdgeInsets.only(right: 10),
+                      margin: const EdgeInsets.only(top: 10),
                       child: ElevatedButton(
                           onPressed: () {
                             openTeacher(teacherId, teachersFullName);
