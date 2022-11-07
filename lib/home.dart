@@ -142,7 +142,7 @@ class _HomePageState extends State<HomePage> {
         Navigator.of(context).push(MaterialPageRoute(
           builder: (_) {
             return Teacher(
-              title: "Stundenplan von $teacherFullName",
+              title: "$teacherFullName",
               list: listItemsBuild(tmpApi),
             );
           },
