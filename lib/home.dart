@@ -45,8 +45,11 @@ class _HomePageState extends State<HomePage> {
 
   DateTime parseTime(String input, String date) => DateTime.parse(
       "${DateFormat("yyyy-MM-dd").format(DateTime.parse(date))} $input");
-  String stingifyTime(DateTime input) => DateFormat("hh:mm").format(input);
+  String stingifyTime(DateTime input) => DateFormat("HH:mm").format(input);
 
+  /**
+   * SHOWS DIFFRENT ICONS BASED ON TIME
+   */
   Widget iconTimex(DateTime start, DateTime end) {
     double size = 16;
     DateTime now = DateTime.now();
@@ -80,6 +83,9 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  /**
+   * SYNC JOBS
+   */
   void setup() async {
     //get cache
     final prefs = await SharedPreferences.getInstance();
@@ -129,6 +135,9 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
+  /**
+   * CLICK EVENT HANDLERs
+   */
   void openTeacher(int teacherId, String teacherFullName) async {
     setState(() {
       globalLoading = true;
@@ -154,6 +163,9 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  /**
+   * FUNCTIONAL COMPONENT THAT CONVERTS API DATA TO WIDGETS
+   */
   List<Widget> listItemsBuild(Api apiData) {
     //reset vars
     isFirstLesson = {};
@@ -182,10 +194,6 @@ class _HomePageState extends State<HomePage> {
       int currentPause = 0;
       bool showPauseBefore = ((mapIndex * 2) - 1 < 0 ||
               lessonTimes.length <= (mapIndex * 2) - 1 ||
-              // check if dif between latest added... time & current ... time
-              // currentTimestamp - 6e+8 >
-              //     lessonTimes[(mapIndex * 2) - 1] ||
-              //check if is negativ (might bi parallel times)
               currentTimestamp - lessonTimes[(mapIndex * 2) - 1] < 0)
           ? false
           : true;
@@ -199,7 +207,9 @@ class _HomePageState extends State<HomePage> {
       isFirstLesson[datum.lessonDate.toString()] = true;
       int intWeekDay = DateTime.parse(datum.lessonDate.toString()).weekday;
       String weekDay = weekdays[intWeekDay].toString();
-
+      /**
+       * TILE
+       */
       ListTile listTile = ListTile(
         /**
          * ROW ICON
@@ -303,6 +313,9 @@ class _HomePageState extends State<HomePage> {
         ]),
       );
 
+      /**
+       * ADDITIONAL INFOS
+       */
       if (showWeekDay) {
         return Column(
           children: [
@@ -339,6 +352,9 @@ class _HomePageState extends State<HomePage> {
     }).toList();
   }
 
+  /**
+   * PAGE
+   */
   @override
   Widget build(BuildContext context) {
     return Scaffold(
