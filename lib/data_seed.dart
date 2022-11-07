@@ -4,6 +4,7 @@ class DataSeed {
   String title = "2I Stundenplan";
 
   String api = "https://kbw.senpai.one/tmp.json";
+  String teacherApi = "https://kbw.senpai.one/api/teacher.php?teacher=";
 
   static Color getCourseColor(String course) {
     switch (course.toUpperCase()) {
