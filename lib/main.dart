@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/data_seed.dart';
 import 'package:flutter_application_1/home.dart';
+import 'package:flutter_application_1/license.dart';
+import 'package:flutter_application_1/router.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,6 +23,6 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const HomePage());
+        home: const LocalRouter());
   }
 }
