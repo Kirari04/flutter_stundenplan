@@ -150,6 +150,7 @@ class _HomePageState extends State<HomePage> {
         //open page
         // tmpApi
         Navigator.of(context).push(MaterialPageRoute(
+          settings: RouteSettings(name: "/teacher/$teacherId"),
           builder: (_) {
             return Teacher(
               title: "$teacherFullName",
@@ -169,6 +170,7 @@ class _HomePageState extends State<HomePage> {
       globalLoading = true;
     });
     Navigator.of(context).push(MaterialPageRoute(
+      settings: RouteSettings(name: '/licence'),
       builder: (_) {
         return Licence();
       },
