@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Licence extends StatefulWidget {
-  Licence({super.key});
+  const Licence({super.key});
   @override
   State<Licence> createState() => _LicenceState();
 }
