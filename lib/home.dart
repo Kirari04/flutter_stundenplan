@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/license.dart';
 import 'package:flutter_application_1/teacher.dart';
 import 'package:flutter_application_1/data_seed.dart';
 import 'package:flutter_application_1/api.dart';
@@ -35,6 +34,7 @@ class _HomePageState extends State<HomePage> {
   List<int> lessonTimes = [];
   int mapIndex = -1;
   List<Widget> listItems = [];
+  bool showFullName = true;
 
   Future<http.Response> fetchApi() {
     return http.get(Uri.parse(data.api));
@@ -165,21 +165,6 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void openLicence() async {
-    setState(() {
-      globalLoading = true;
-    });
-    Navigator.of(context).push(MaterialPageRoute(
-      settings: RouteSettings(name: '/licence'),
-      builder: (_) {
-        return Licence();
-      },
-    ));
-    setState(() {
-      globalLoading = false;
-    });
-  }
-
   /**
    * FUNCTIONAL COMPONENT THAT CONVERTS API DATA TO WIDGETS
    */
@@ -224,81 +209,112 @@ class _HomePageState extends State<HomePage> {
       isFirstLesson[datum.lessonDate.toString()] = true;
       int intWeekDay = DateTime.parse(datum.lessonDate.toString()).weekday;
       String weekDay = weekdays[intWeekDay].toString();
+
       /**
        * TILE
        */
       ListTile listTile = ListTile(
-        /**
-         * ROW ICON
-         */
-        leading: Container(
-            decoration: BoxDecoration(
-                boxShadow: const [
-                  BoxShadow(
-                      color: Color.fromRGBO(59, 59, 59, 0.3),
-                      blurRadius: 10,
-                      spreadRadius: 5)
-                ],
-                color: DataSeed.getCourseColor(datum.courseName.toString()),
-                borderRadius: const BorderRadius.all(Radius.circular(4.0))),
-            height: 40,
-            width: 40,
-            child: Stack(clipBehavior: Clip.none, children: [
-              Center(
-                child: ((datum.courseName != null)
-                    ? Text(
-                        datum.courseName.toString(),
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w600, color: Colors.white),
-                      )
-                    : const Icon(
-                        Icons.question_mark_rounded,
-                        color: Colors.white,
-                      )),
-              ),
-              Positioned(
-                  right: -10,
-                  bottom: -10,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                        color: Colors.black87,
-                        borderRadius: BorderRadius.all(Radius.circular(999))),
-                    padding: const EdgeInsets.all(5),
-                    child: iconTimex(
-                        parseTime(datum.lessonStart.toString(),
-                            datum.lessonDate.toString()),
-                        parseTime(datum.lessonEnd.toString(),
-                            datum.lessonDate.toString())),
-                  ))
-            ])),
-        title: Row(children: [
-          /**
-           * ROW TIME
-           */
-          Expanded(
-              flex: 0,
-              child: Container(
-                margin: const EdgeInsets.only(right: 10),
-                child: Text(
-                  datum.roomName.toString(),
-                  style: const TextStyle(color: Colors.redAccent),
-                ),
-              )),
-          /**
-           * ROW TIME
-           */
+        title: Flex(direction: Axis.horizontal, children: [
           Expanded(
               flex: 1,
-              child: Text(
-                "${stingifyTime(parseTime(datum.lessonStart.toString(), datum.lessonDate.toString()))} - ${stingifyTime(parseTime(datum.lessonEnd.toString(), datum.lessonDate.toString()))}",
-                style: const TextStyle(color: Colors.white),
+              child: Wrap(
+                alignment: WrapAlignment.start,
+                children: [
+                  /**
+                   * ROW ICON
+                   */
+                  AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                      decoration: BoxDecoration(
+                          boxShadow: const [
+                            BoxShadow(
+                                color: Color.fromRGBO(59, 59, 59, 0.3),
+                                blurRadius: 10,
+                                spreadRadius: 5)
+                          ],
+                          color: DataSeed.getCourseColor(
+                              datum.courseName.toString()),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(4.0))),
+                      height: 40,
+                      width: showFullName ? 220 : 40,
+                      child: Stack(clipBehavior: Clip.none, children: [
+                        InkWell(
+                          onTap: () => setState(() {
+                            showFullName = (showFullName) ? false : true;
+                            listItems = listItemsBuild(apiData);
+                          }),
+                          child: Center(
+                            child: ((datum.courseName != null)
+                                ? Text(
+                                    showFullName
+                                        ? datum.subjectName.toString()
+                                        : datum.courseName.toString(),
+                                    maxLines: 1,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white),
+                                  )
+                                : const Icon(
+                                    Icons.question_mark_rounded,
+                                    color: Colors.white,
+                                  )),
+                          ),
+                        ),
+                        Positioned(
+                            right: -10,
+                            bottom: -10,
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                  color: Colors.black87,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(999))),
+                              padding: const EdgeInsets.all(5),
+                              child: iconTimex(
+                                  parseTime(datum.lessonStart.toString(),
+                                      datum.lessonDate.toString()),
+                                  parseTime(datum.lessonEnd.toString(),
+                                      datum.lessonDate.toString())),
+                            )),
+                      ])),
+                  /**
+                   * ROW TIME
+                   */
+                  Container(
+                    height: 40,
+                    padding: EdgeInsets.all(14),
+                    child: Wrap(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(right: 10),
+                          child: Text(
+                            datum.roomName.toString(),
+                            style: const TextStyle(color: Colors.redAccent),
+                          ),
+                        ),
+                        /**
+                         * ROW TIME
+                         */
+                        Text(
+                          "${stingifyTime(parseTime(datum.lessonStart.toString(), datum.lessonDate.toString()))} - ${stingifyTime(parseTime(datum.lessonEnd.toString(), datum.lessonDate.toString()))}",
+                          style: const TextStyle(color: Colors.white),
+                          maxLines: 1,
+                        )
+                      ],
+                    ),
+                  )
+                ],
               )),
           /**
            * ROW Functions
            */
-          Expanded(
-              flex: 0,
-              child: Column(
+          Container(
+              alignment: Alignment.centerRight,
+              margin: EdgeInsets.only(left: 10),
+              child: Wrap(
+                direction: Axis.vertical,
+                spacing: 10,
                 children: [
                   ...datum.teacherId!.map((teacherId) {
                     String teachersFullName = datum
@@ -309,7 +325,6 @@ class _HomePageState extends State<HomePage> {
                         .join("")
                         .toUpperCase();
                     return Container(
-                      margin: const EdgeInsets.only(top: 10),
                       child: ElevatedButton(
                           onPressed: () {
                             openTeacher(teacherId, teachersFullName);
@@ -326,7 +341,7 @@ class _HomePageState extends State<HomePage> {
                     );
                   }),
                 ],
-              ))
+              )),
         ]),
       );
 
@@ -374,59 +389,31 @@ class _HomePageState extends State<HomePage> {
    */
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black12,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(50),
-        child: AppBar(
-            backgroundColor: Colors.black,
-            title: Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      data.title,
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-                Expanded(
-                    flex: 1,
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: Wrap(
-                        spacing: 10,
-                        children: [
-                          ElevatedButton(
-                              onPressed: openLicence,
-                              child: const Icon(Icons.copyright_rounded)),
-                        ],
-                      ),
-                    )),
-                Expanded(
-                    flex: 1,
-                    child: Container(
-                      alignment: Alignment.centerRight,
-                      child: (isLoading || globalLoading)
-                          ? const CircularProgressIndicator(
-                              color: Colors.white,
-                            )
-                          : const SizedBox.shrink(),
-                    ))
-              ],
-            )),
-      ),
-      body: Container(
-          alignment: Alignment.topLeft,
-          width: double.infinity,
-          height: double.infinity,
-          child: ((api.runtimeType != Api)
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : ListView(children: listItems))),
+    return Stack(
+      children: [
+        Container(
+            alignment: Alignment.topLeft,
+            width: double.infinity,
+            height: double.infinity,
+            child: ((api.runtimeType != Api)
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : ListView(children: [...listItems]))),
+        Positioned(
+            top: 10,
+            left: 0,
+            width: MediaQuery.of(context).size.width,
+            child: Center(
+              child: SizedBox(
+                height: 40,
+                width: 40,
+                child: (isLoading || globalLoading)
+                    ? const CircularProgressIndicator()
+                    : const SizedBox.shrink(),
+              ),
+            ))
+      ],
     );
   }
 }

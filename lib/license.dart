@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data_seed.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -45,37 +46,15 @@ class _LicenceState extends State<Licence> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(50),
-        child: AppBar(
-            backgroundColor: Colors.black,
-            title: Row(
-              children: [
-                Expanded(
-                    flex: 1,
-                    child: Text(
-                      text.toString().split("\n")[0].toUpperCase().trim(),
-                      style: const TextStyle(color: Colors.white),
-                    )),
-              ],
-            )),
-      ),
-      body: Container(
-        alignment: Alignment.topLeft,
-        width: double.infinity,
-        height: double.infinity,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Container(
-            padding: EdgeInsets.all(10),
-            child: Center(
-                child: Text(
-              text.toString().trim(),
-              textAlign: TextAlign.center,
-              style: const TextStyle(color: Colors.white),
-            )),
+    return Container(
+      alignment: Alignment.topLeft,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Container(
+          padding: EdgeInsets.all(10),
+          child: Text(
+            text.toString(),
+            style: TextStyle(color: Colors.white, fontSize: 14),
           ),
         ),
       ),
