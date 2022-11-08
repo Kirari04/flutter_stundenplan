@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/license.dart';
 import 'package:flutter_application_1/teacher.dart';
 import 'package:flutter_application_1/data_seed.dart';
 import 'package:flutter_application_1/api.dart';
@@ -41,6 +42,10 @@ class _HomePageState extends State<HomePage> {
 
   Future<http.Response> fetchTeacherApi(int teacherId) {
     return http.get(Uri.parse(data.teacherApi + teacherId.toString()));
+  }
+
+  Future<http.Response> fetchLicenceApi() {
+    return http.get(Uri.parse(data.licenceApi));
   }
 
   DateTime parseTime(String input, String date) => DateTime.parse(
@@ -157,6 +162,25 @@ class _HomePageState extends State<HomePage> {
           },
         ));
       }
+    }
+    setState(() {
+      globalLoading = false;
+    });
+  }
+
+  void openLicence() async {
+    setState(() {
+      globalLoading = true;
+    });
+    http.Response res = await fetchLicenceApi();
+    if (res.statusCode == 200) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (_) {
+          return Licence(
+              title: res.body.split("\n")[0].toUpperCase().trim(),
+              text: res.body);
+        },
+      ));
     }
     setState(() {
       globalLoading = false;
@@ -366,15 +390,33 @@ class _HomePageState extends State<HomePage> {
             title: Row(
               children: [
                 Expanded(
-                    flex: 1,
+                  flex: 1,
+                  child: Container(
+                    alignment: Alignment.centerLeft,
                     child: Text(
                       data.title,
                       style: const TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+                Expanded(
+                    flex: 1,
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: Wrap(
+                        spacing: 10,
+                        children: [
+                          ElevatedButton(
+                              onPressed: openLicence,
+                              child: const Icon(Icons.copyright_rounded)),
+                        ],
+                      ),
                     )),
                 Expanded(
-                    flex: 0,
+                    flex: 1,
                     child: Container(
-                      child: (isLoading == true)
+                      alignment: Alignment.centerRight,
+                      child: (isLoading || globalLoading)
                           ? const CircularProgressIndicator(
                               color: Colors.white,
                             )
@@ -387,7 +429,7 @@ class _HomePageState extends State<HomePage> {
           alignment: Alignment.topLeft,
           width: double.infinity,
           height: double.infinity,
-          child: ((api.runtimeType != Api || globalLoading)
+          child: ((api.runtimeType != Api)
               ? const Center(
                   child: CircularProgressIndicator(),
                 )
