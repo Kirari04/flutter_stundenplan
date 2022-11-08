@@ -1,20 +1,47 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/data_seed.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Licence extends StatefulWidget {
-  Licence({super.key, required this.title, required this.text});
-
-  String title;
-  String text;
-
+  Licence({super.key});
   @override
-  State<Licence> createState() => _LicenceState(title, text);
+  State<Licence> createState() => _LicenceState();
 }
 
 class _LicenceState extends State<Licence> {
-  String title;
-  String text;
+  _LicenceState();
+  String? title;
+  String? text;
 
-  _LicenceState(this.title, this.text);
+  DataSeed data = DataSeed();
+
+  Future<http.Response> fetchLicenceApi() {
+    return http.get(Uri.parse(data.licenceApi));
+  }
+
+  void initState() {
+    SharedPreferences.getInstance().then((prefs) {
+      //by default show cached
+      setState(() {
+        text = prefs.getString('licence');
+      });
+    });
+
+    //update licence
+    fetchLicenceApi().then((http.Response res) {
+      if (res.statusCode == 200) {
+        setState(() {
+          text = res.body;
+        });
+        SharedPreferences.getInstance().then((prefs) {
+          prefs.setString('licence', text.toString());
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,27 +56,29 @@ class _LicenceState extends State<Licence> {
                 Expanded(
                     flex: 1,
                     child: Text(
-                      title,
+                      text.toString().split("\n")[0].toUpperCase().trim(),
                       style: const TextStyle(color: Colors.white),
                     )),
               ],
             )),
       ),
       body: Container(
-          alignment: Alignment.topLeft,
-          width: double.infinity,
-          height: double.infinity,
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Center(
-                  child: Text(
-                text,
-                style: const TextStyle(color: Colors.white),
-              )),
-            ),
-          )),
+        alignment: Alignment.topLeft,
+        width: double.infinity,
+        height: double.infinity,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Container(
+            padding: EdgeInsets.all(10),
+            child: Center(
+                child: Text(
+              text.toString().trim(),
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.white),
+            )),
+          ),
+        ),
+      ),
     );
   }
 }

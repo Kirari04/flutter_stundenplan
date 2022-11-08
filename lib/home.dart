@@ -44,10 +44,6 @@ class _HomePageState extends State<HomePage> {
     return http.get(Uri.parse(data.teacherApi + teacherId.toString()));
   }
 
-  Future<http.Response> fetchLicenceApi() {
-    return http.get(Uri.parse(data.licenceApi));
-  }
-
   DateTime parseTime(String input, String date) => DateTime.parse(
       "${DateFormat("yyyy-MM-dd").format(DateTime.parse(date))} $input");
   String stingifyTime(DateTime input) => DateFormat("HH:mm").format(input);
@@ -172,16 +168,11 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       globalLoading = true;
     });
-    http.Response res = await fetchLicenceApi();
-    if (res.statusCode == 200) {
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) {
-          return Licence(
-              title: res.body.split("\n")[0].toUpperCase().trim(),
-              text: res.body);
-        },
-      ));
-    }
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (_) {
+        return Licence();
+      },
+    ));
     setState(() {
       globalLoading = false;
     });
