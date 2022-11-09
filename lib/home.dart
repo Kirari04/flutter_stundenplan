@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
   List<int> lessonTimes = [];
   int mapIndex = -1;
   List<Widget> listItems = [];
-  bool showFullName = true;
+  bool showFullName = false;
 
   Future<http.Response> fetchApi() {
     return http.get(Uri.parse(data.api));
@@ -120,9 +120,18 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void initStateFromCache() async {
+    final prefs = await SharedPreferences.getInstance();
+    var showFullNameCache = prefs.getBool('showFullName');
+    showFullName = (showFullNameCache == null || showFullNameCache == false)
+        ? false
+        : true;
+  }
+
   @override
   void initState() {
     super.initState();
+    initStateFromCache();
     setup();
     timer = Timer.periodic(const Duration(seconds: 5), (Timer t) {
       // here run refresh etc
@@ -244,6 +253,8 @@ class _HomePageState extends State<HomePage> {
                           onTap: () => setState(() {
                             showFullName = (showFullName) ? false : true;
                             listItems = listItemsBuild(apiData);
+                            SharedPreferences.getInstance().then((value) =>
+                                value.setBool("showFullName", showFullName));
                           }),
                           child: Center(
                             child: ((datum.courseName != null)
