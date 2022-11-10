@@ -1,5 +1,12 @@
 # Klasse 2I Stundenplan
 
+## Screenshots
+<p float="left">
+    <img src="./screenshots/Screenshot_20221110-102544.jpg" width="200">
+    <img src="./screenshots/Screenshot_20221110-102554.jpg" width="200">
+    <img src="./screenshots/Screenshot_20221110-102720.jpg" width="200">
+</p>
+
 ## Build Application
 
 ### Android
