@@ -53,7 +53,16 @@ class _TeacherState extends State<Teacher> {
   @override
   void initState() {
     super.initState();
+    initStateFromCache();
     loadTeacher();
+  }
+
+  void initStateFromCache() async {
+    final prefs = await SharedPreferences.getInstance();
+    var showFullNameCache = prefs.getBool('showFullName');
+    showFullName = (showFullNameCache == null || showFullNameCache == false)
+        ? false
+        : true;
   }
 
   void loadTeacher() async {
@@ -90,7 +99,8 @@ class _TeacherState extends State<Teacher> {
    * CLICK EVENT HANDLERs
    */
   void openTeacher(int teacherId, String teacherFullName) async {
-    Navigator.of(context).push(MaterialPageRoute(
+    Navigator.of(context)
+        .push(MaterialPageRoute(
       settings: RouteSettings(name: "/teacher/$teacherId"),
       builder: (_) {
         return Teacher(

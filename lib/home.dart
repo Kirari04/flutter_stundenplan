@@ -149,7 +149,8 @@ class _HomePageState extends State<HomePage> {
    * CLICK EVENT HANDLERs
    */
   void openTeacher(int teacherId, String teacherFullName) async {
-    Navigator.of(context).push(MaterialPageRoute(
+    Navigator.of(context)
+        .push(MaterialPageRoute(
       settings: RouteSettings(name: "/teacher/$teacherId"),
       builder: (_) {
         return Teacher(
