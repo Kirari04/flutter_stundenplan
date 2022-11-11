@@ -50,21 +50,31 @@ class _TeacherState extends State<Teacher> {
       "${DateFormat("yyyy-MM-dd").format(DateTime.parse(date))} $input");
   String stingifyTime(DateTime input) => DateFormat("HH:mm").format(input);
 
-    @override
+  @override
   void initState() {
     super.initState();
     loadTeacher();
   }
 
-
   void loadTeacher() async {
     setState(() {
       isLoading = true;
     });
+    final prefs = await SharedPreferences.getInstance();
+    final apiOldData = prefs.getString('apiDataTeacher$teacherId');
+    if (apiOldData != null) {
+      Api tmpCacheApi = Api.fromRawJson(apiOldData);
+      api = tmpCacheApi;
+      setState(() {
+        listItems = listItemsBuild(tmpCacheApi);
+      });
+    }
+
     http.Response res = await fetchTeacherApi(teacherId);
     if (res.statusCode == 200) {
       Api tmpApi = Api.fromRawJson(res.body);
       if (tmpApi.status == 1) {
+        prefs.setString('apiDataTeacher$teacherId', res.body);
         api = tmpApi;
         setState(() {
           listItems = listItemsBuild(tmpApi);
@@ -274,7 +284,9 @@ class _TeacherState extends State<Teacher> {
                 direction: Axis.vertical,
                 spacing: 10,
                 children: [
-                  ...datum.teacherId!.map((teacherId) {
+                  ...datum.teacherId!
+                      .where((teacherTmpId) => (teacherTmpId != teacherId))
+                      .map((teacherId) {
                     String teachersFullName = datum
                         .teacherFullName![datum.teacherId!.indexOf(teacherId)];
                     String initials = teachersFullName
@@ -285,8 +297,7 @@ class _TeacherState extends State<Teacher> {
                     return Container(
                       child: ElevatedButton(
                           onPressed: () {
-                            openTeacher(
-                                teacherId, teachersFullName);
+                            openTeacher(teacherId, teachersFullName);
                           },
                           child: Row(
                             children: [
@@ -299,6 +310,26 @@ class _TeacherState extends State<Teacher> {
                           )),
                     );
                   }),
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.all(Radius.circular(4))),
+                    padding:
+                        EdgeInsets.only(left: 15, right: 15, top: 2, bottom: 2),
+                    child: Row(
+                      children: [
+                        Text(
+                          datum.className.toString(),
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.w600),
+                        ),
+                        const Icon(
+                          Icons.people_alt_rounded,
+                          color: Colors.white,
+                        )
+                      ],
+                    ),
+                  )
                 ],
               )),
         ]),
