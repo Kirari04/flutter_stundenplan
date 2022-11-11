@@ -149,29 +149,15 @@ class _HomePageState extends State<HomePage> {
    * CLICK EVENT HANDLERs
    */
   void openTeacher(int teacherId, String teacherFullName) async {
-    setState(() {
-      globalLoading = true;
-    });
-    http.Response res = await fetchTeacherApi(teacherId);
-    if (res.statusCode == 200) {
-      Api tmpApi = Api.fromRawJson(res.body);
-      if (tmpApi.status == 1) {
-        //open page
-        // tmpApi
-        Navigator.of(context).push(MaterialPageRoute(
-          settings: RouteSettings(name: "/teacher/$teacherId"),
-          builder: (_) {
-            return Teacher(
-              title: "$teacherFullName",
-              list: listItemsBuild(tmpApi),
-            );
-          },
-        ));
-      }
-    }
-    setState(() {
-      globalLoading = false;
-    });
+    Navigator.of(context).push(MaterialPageRoute(
+      settings: RouteSettings(name: "/teacher/$teacherId"),
+      builder: (_) {
+        return Teacher(
+          title: teacherFullName,
+          teacherId: teacherId,
+        );
+      },
+    ));
   }
 
   /**
