@@ -1,3 +1,5 @@
+// ignore_for_file: slash_for_doc_comments
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -149,8 +151,7 @@ class _HomePageState extends State<HomePage> {
    * CLICK EVENT HANDLERs
    */
   void openTeacher(int teacherId, String teacherFullName) async {
-    Navigator.of(context)
-        .push(MaterialPageRoute(
+    Navigator.of(context).push(MaterialPageRoute(
       settings: RouteSettings(name: "/teacher/$teacherId"),
       builder: (_) {
         return Teacher(
@@ -281,7 +282,7 @@ class _HomePageState extends State<HomePage> {
                    */
                   Container(
                     height: 40,
-                    padding: EdgeInsets.all(14),
+                    padding: const EdgeInsets.all(14),
                     child: Wrap(
                       children: [
                         Container(
@@ -309,34 +310,32 @@ class _HomePageState extends State<HomePage> {
            */
           Container(
               alignment: Alignment.centerRight,
-              margin: EdgeInsets.only(left: 10),
+              margin: const EdgeInsets.only(left: 10),
               child: Wrap(
                 direction: Axis.vertical,
                 spacing: 10,
                 children: [
                   ...datum.teacherId!.map((teacherId) {
                     String teachersFullName = datum
-                        .teacherFullName![datum.teacherId!.indexOf(teacherId)];
+                        .teacherFullName![datum.teacherId!.indexOf(teacherId)]!;
                     String initials = teachersFullName
                         .split(" ")
                         .map((e) => e[0])
                         .join("")
                         .toUpperCase();
-                    return Container(
-                      child: ElevatedButton(
-                          onPressed: () {
-                            openTeacher(teacherId, teachersFullName);
-                          },
-                          child: Row(
-                            children: [
-                              Text(initials),
-                              const Icon(
-                                Icons.school_rounded,
-                                color: Colors.white,
-                              )
-                            ],
-                          )),
-                    );
+                    return ElevatedButton(
+                        onPressed: () {
+                          openTeacher(teacherId!, teachersFullName);
+                        },
+                        child: Row(
+                          children: [
+                            Text(initials),
+                            const Icon(
+                              Icons.school_rounded,
+                              color: Colors.white,
+                            )
+                          ],
+                        ));
                   }),
                 ],
               )),

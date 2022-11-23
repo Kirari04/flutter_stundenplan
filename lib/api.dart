@@ -93,13 +93,13 @@ class Datum {
     this.relatedId,
   });
 
-  int id;
-  int timetableElementId;
+  int? id;
+  int? timetableElementId;
   int? holidayId;
   List<int>? blockId;
-  List<int>? blockTeacherId;
-  List<int>? blockClassId;
-  List<int>? blockRoomId;
+  List<int?>? blockTeacherId;
+  List<int?>? blockClassId;
+  List<int?>? blockRoomId;
   int? modId;
   int? periodId;
   String? start;
@@ -130,37 +130,37 @@ class Datum {
   int? subjectId;
   String? subjectName;
   int? timegridId;
-  List<int>? classId;
+  List<int?>? classId;
   String? className;
   String? profileId;
   String? teamId;
-  List<int>? teacherId;
+  List<int?>? teacherId;
   String? teacherAcronym;
-  List<String>? teacherFullName;
+  List<String?>? teacherFullName;
   String? teacherLastname;
   String? teacherFirstname;
-  List<int>? connectedTeacherId;
-  List<String>? connectedTeacherFullName;
-  List<Student>? student;
-  List<int>? studentId;
+  List<int?>? connectedTeacherId;
+  List<String?>? connectedTeacherFullName;
+  List<Student?>? student;
+  List<int?>? studentId;
   String? studentFullName;
   String? studentLastname;
   String? studentFirstname;
-  List<int>? roomId;
+  List<int?>? roomId;
   String? roomName;
   String? locationDescription;
-  List<int>? resourceId;
+  List<int?>? resourceId;
   int? timetableClassBookId;
   bool? hasHomework;
   bool? hasHomeworkFiles;
   bool? hasExam;
   bool? hasExamFiles;
-  List<String>? privileges;
+  List<String?>? privileges;
   String? resource;
   int? reservedResources;
   int? totalStock;
   String? school;
-  List<String>? relatedId;
+  List<String?>? relatedId;
 
   factory Datum.fromRawJson(String str) => Datum.fromJson(json.decode(str));
 

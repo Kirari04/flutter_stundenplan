@@ -82,28 +82,26 @@ class _LocalRouterState extends State<LocalRouter> {
               ],
             )),
       ),
-      body: Container(
-        child: Stack(
-            alignment: Alignment.topLeft,
-            clipBehavior: Clip.hardEdge,
-            children: [
-              ...localRouter.map((e) {
-                bool selEl = (e.loc == localRouter.elementAt(index).loc);
-                return AnimatedPositioned(
+      body: Stack(
+          alignment: Alignment.topLeft,
+          clipBehavior: Clip.hardEdge,
+          children: [
+            ...localRouter.map((e) {
+              bool selEl = (e.loc == localRouter.elementAt(index).loc);
+              return AnimatedPositioned(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  left: selEl ? 0 : MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  child: AnimatedOpacity(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
-                    left: selEl ? 0 : MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width,
-                    child: AnimatedOpacity(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                      opacity: selEl ? 1 : 0,
-                      child: e.obj,
-                    ));
-              }).toList()
-            ]),
-      ),
+                    opacity: selEl ? 1 : 0,
+                    child: e.obj,
+                  ));
+            }).toList()
+          ]),
       bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.black87,
           currentIndex: index,
