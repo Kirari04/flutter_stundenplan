@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/bbw.dart';
 import 'package:flutter_application_1/data_seed.dart';
 import 'package:flutter_application_1/home.dart';
 import 'package:flutter_application_1/license.dart';
@@ -33,6 +34,8 @@ class _LocalRouterState extends State<LocalRouter> {
         name: 'Home',
         obj: const HomePage(),
         icon: Icons.home_rounded),
+    LocalRouterItem(
+        loc: '/bbw', name: 'BBW', obj: const BBWPage(), icon: Icons.computer),
     LocalRouterItem(
         loc: '/licence',
         name: 'Licence',

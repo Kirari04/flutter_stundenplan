@@ -6,6 +6,8 @@ class DataSeed {
   String api = "https://kbw.senpai.one/tmp.json";
   String teacherApi = "https://kbw.senpai.one/api/teacher.php?teacher=";
 
+  String bbwApi = "https://bbw.senpai.one/";
+
   String licenceApi =
       "https://raw.githubusercontent.com/Kirari04/flutter_stundenplan/master/LICENSE";
 

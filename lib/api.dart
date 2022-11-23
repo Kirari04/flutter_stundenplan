@@ -6,11 +6,11 @@ import 'dart:convert';
 
 class Api {
   Api({
-    required this.status,
+    this.status,
     required this.data,
   });
 
-  int status;
+  int? status;
   List<Datum> data;
 
   factory Api.fromRawJson(String str) => Api.fromJson(json.decode(str));
@@ -104,7 +104,7 @@ class Datum {
   int? periodId;
   String? start;
   String? end;
-  DateTime? lessonDate;
+  String? lessonDate;
   String? lessonStart;
   String? lessonEnd;
   String? lessonDuration;
@@ -184,9 +184,7 @@ class Datum {
         periodId: json["periodId"],
         start: json["start"],
         end: json["end"],
-        lessonDate: json["lessonDate"] == null
-            ? null
-            : DateTime.parse(json["lessonDate"]),
+        lessonDate: json["lessonDate"],
         lessonStart: json["lessonStart"],
         lessonEnd: json["lessonEnd"],
         lessonDuration: json["lessonDuration"],
