@@ -3,6 +3,13 @@ description: 2I Stundenplan
 
 flutter_app_name:
   name: "2I Stundenplan"
+msix_config:
+  display_name: 2I Stundenplan
+  publisher_display_name: Kirari04 Private
+  identity_name: private.kirari04.2istundenplan
+  msix_version: 1.0.0.0
+  logo_path: C:\Users\lev\Documents\GitHub\flutter_stundenplan\debian\gui\stundenplan.png
+  capabilities: internetClient
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -43,6 +50,7 @@ dependencies:
   shared_preferences: ^2.0.15
   flutter_markdown: ^0.6.13
   flutter_app_name: ^0.1.1
+  version: ^3.0.2
 
 dev_dependencies:
   flutter_test:
