@@ -1,5 +1,8 @@
 # Miscellaneous
 *.class
+*.deb
+*.exe
+*.msi
 *.log
 *.pyc
 *.swp
