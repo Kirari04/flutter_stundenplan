@@ -1,4 +1,6 @@
+import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/bbw.dart';
 import 'package:flutter_application_1/data_seed.dart';
 import 'package:flutter_application_1/home.dart';
 import 'package:flutter_application_1/license.dart';
@@ -34,6 +36,8 @@ class _LocalRouterState extends State<LocalRouter> {
         obj: const HomePage(),
         icon: Icons.home_rounded),
     LocalRouterItem(
+        loc: '/bbw', name: 'BBW', obj: const BBWPage(), icon: Icons.computer),
+    LocalRouterItem(
         loc: '/licence',
         name: 'Licence',
         obj: const Licence(),
@@ -43,19 +47,16 @@ class _LocalRouterState extends State<LocalRouter> {
   bool globalLoading = false;
   DataSeed data = DataSeed();
 
-  void openLicence() async {
-    setState(() {
-      globalLoading = true;
-    });
-    Navigator.of(context).push(MaterialPageRoute(
-      settings: const RouteSettings(name: '/licence'),
-      builder: (_) {
-        return const Licence();
-      },
-    ));
-    setState(() {
-      globalLoading = false;
-    });
+  void setDesktopWindowSize() {
+    DesktopWindow.setWindowSize(const Size(500, 1000));
+    DesktopWindow.setMinWindowSize(const Size(400, 400));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    setDesktopWindowSize();
   }
 
   @override
@@ -82,28 +83,26 @@ class _LocalRouterState extends State<LocalRouter> {
               ],
             )),
       ),
-      body: Container(
-        child: Stack(
-            alignment: Alignment.topLeft,
-            clipBehavior: Clip.hardEdge,
-            children: [
-              ...localRouter.map((e) {
-                bool selEl = (e.loc == localRouter.elementAt(index).loc);
-                return AnimatedPositioned(
+      body: Stack(
+          alignment: Alignment.topLeft,
+          clipBehavior: Clip.hardEdge,
+          children: [
+            ...localRouter.map((e) {
+              bool selEl = (e.loc == localRouter.elementAt(index).loc);
+              return AnimatedPositioned(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  left: selEl ? 0 : MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  child: AnimatedOpacity(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
-                    left: selEl ? 0 : MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width,
-                    child: AnimatedOpacity(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                      opacity: selEl ? 1 : 0,
-                      child: e.obj,
-                    ));
-              }).toList()
-            ]),
-      ),
+                    opacity: selEl ? 1 : 0,
+                    child: e.obj,
+                  ));
+            }).toList()
+          ]),
       bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.black87,
           currentIndex: index,

@@ -5,23 +5,23 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/teacher.dart';
 import 'package:flutter_application_1/data_seed.dart';
-import 'package:flutter_application_1/api.dart';
+import 'package:flutter_application_1/bbwApi.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class BBWPage extends StatefulWidget {
+  const BBWPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<BBWPage> createState() => _BBWPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _BBWPageState extends State<BBWPage> {
   bool isLoading = false;
   bool globalLoading = false;
   DataSeed data = DataSeed();
-  Api? api;
+  BBWApi? api;
   Map<String, bool> isFirstLesson = {};
   Map<int, String> weekdays = {
     1: "Montag",
@@ -34,16 +34,14 @@ class _HomePageState extends State<HomePage> {
   };
   Timer? timer;
   List<int> lessonTimes = [];
+  Set<String> classNames = <String>{};
   int mapIndex = -1;
   List<Widget> listItems = [];
   bool showFullName = false;
+  String dropdownValue = "";
 
   Future<http.Response> fetchApi() {
-    return http.get(Uri.parse(data.api));
-  }
-
-  Future<http.Response> fetchTeacherApi(int teacherId) {
-    return http.get(Uri.parse(data.teacherApi + teacherId.toString()));
+    return http.get(Uri.parse(data.bbwApi));
   }
 
   DateTime parseTime(String input, String date) => DateTime.parse(
@@ -92,10 +90,32 @@ class _HomePageState extends State<HomePage> {
   void setup() async {
     //get cache
     final prefs = await SharedPreferences.getInstance();
-    final apiOldData = prefs.getString('apiData');
+    final apiOldData = prefs.getString('bbwApiData');
     setState(() {
       if (apiOldData != null) {
-        api = Api.fromRawJson(apiOldData);
+        api = BBWApi.fromRawJson(apiOldData);
+        // add classnames
+        classNames = <String>{"Show all"};
+        for (var el in api!.data) {
+          classNames.add(el.className.toString());
+        }
+        if (dropdownValue == "") {
+          final oldDropDownVal = prefs.getString('dropDownVal');
+          if (classNames.contains(oldDropDownVal)) {
+            dropdownValue = oldDropDownVal.toString();
+          } else {
+            dropdownValue = classNames.first;
+          }
+        }
+        //order by time
+        api!.data.sort((a, b) {
+          List<String> aStart = a.start!.split(":");
+          List<String> bStart = b.start!.split(":");
+          int aMin = int.parse(aStart[0]) * 60 + int.parse(aStart[1]);
+          int bMin = int.parse(bStart[0]) * 60 + int.parse(bStart[1]);
+          return aMin.compareTo(bMin);
+        });
+        filterList();
         listItems = listItemsBuild(api!);
       }
     });
@@ -106,9 +126,9 @@ class _HomePageState extends State<HomePage> {
     });
     http.Response res = await fetchApi();
     if (res.statusCode == 200) {
-      Api tmpApi = Api.fromRawJson(res.body);
-      if (tmpApi.status == 1) {
-        prefs.setString('apiData', res.body);
+      BBWApi tmpApi = BBWApi.fromRawJson(res.body);
+      if (tmpApi.data.length > 0) {
+        prefs.setString('bbwApiData', res.body);
         if (apiOldData == null) {
           setState(() {
             api = tmpApi;
@@ -147,74 +167,41 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
+  void filterList() {
+    if (dropdownValue != "Show all") {
+      api!.data = api!.data
+          .where((element) => element.className == dropdownValue)
+          .toList();
+    }
+  }
+
   /**
    * CLICK EVENT HANDLERs
    */
-  void openTeacher(int teacherId, String teacherFullName) async {
-    Navigator.of(context).push(MaterialPageRoute(
-      settings: RouteSettings(name: "/teacher/$teacherId"),
-      builder: (_) {
-        return Teacher(
-          title: teacherFullName,
-          teacherId: teacherId,
-        );
-      },
-    ));
+
+  void selectClass(String value) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('dropDownVal', value);
+    setState(() {
+      dropdownValue = value;
+    });
+    setup();
   }
 
   /**
    * FUNCTIONAL COMPONENT THAT CONVERTS API DATA TO WIDGETS
    */
-  List<Widget> listItemsBuild(Api apiData) {
+  List<Widget> listItemsBuild(BBWApi apiData) {
     //reset vars
     isFirstLesson = {};
     lessonTimes = [];
     mapIndex = -1;
 
     return apiData.data.map((datum) {
-      if (datum.lessonDate == null) {
-        return ListTile(
-          title: Text(
-            "Failed to render",
-            style: TextStyle(color: Colors.red),
-          ),
-        );
-      }
       mapIndex++;
       /**
        * CALCULATIONS ON EACH ROW
        */
-      bool showWeekDay =
-          (isFirstLesson[datum.lessonDate.toString()] == null) ? true : false;
-
-      bool isActiveDay = (DateFormat('yyyy-MM-dd').format(DateTime.now()) ==
-              DateFormat('yyyy-MM-dd')
-                  .format(DateTime.parse(datum.lessonDate.toString())))
-          ? true
-          : false;
-      int currentTimestamp =
-          parseTime(datum.lessonStart.toString(), datum.lessonDate.toString())
-              .microsecondsSinceEpoch;
-      int endTimestamp =
-          parseTime(datum.lessonEnd.toString(), datum.lessonDate.toString())
-              .microsecondsSinceEpoch;
-
-      int currentPause = 0;
-      bool showPauseBefore = ((mapIndex * 2) - 1 < 0 ||
-              lessonTimes.length <= (mapIndex * 2) - 1 ||
-              currentTimestamp - lessonTimes[(mapIndex * 2) - 1] < 0)
-          ? false
-          : true;
-      if (showPauseBefore) {
-        currentPause =
-            ((currentTimestamp - lessonTimes[(mapIndex * 2) - 1]) / 60000000)
-                .round();
-      }
-      lessonTimes.add(currentTimestamp);
-      lessonTimes.add(endTimestamp);
-      isFirstLesson[datum.lessonDate.toString()] = true;
-      int intWeekDay = DateTime.parse(datum.lessonDate.toString()).weekday;
-      String weekDay = weekdays[intWeekDay].toString();
 
       /**
        * TILE
@@ -239,12 +226,12 @@ class _HomePageState extends State<HomePage> {
                                 blurRadius: 10,
                                 spreadRadius: 5)
                           ],
-                          color: DataSeed.getCourseColor(
-                              datum.courseName.toString()),
+                          color:
+                              DataSeed.getCourseColor(datum.modul.toString()),
                           borderRadius:
                               const BorderRadius.all(Radius.circular(4.0))),
                       height: 40,
-                      width: showFullName ? 220 : 40,
+                      width: showFullName ? 320 : 60,
                       child: Stack(clipBehavior: Clip.none, children: [
                         InkWell(
                           onTap: () => setState(() {
@@ -254,15 +241,29 @@ class _HomePageState extends State<HomePage> {
                                 value.setBool("showFullName", showFullName));
                           }),
                           child: Center(
-                            child: ((datum.courseName != null)
-                                ? Text(
-                                    showFullName
-                                        ? datum.subjectName.toString()
-                                        : datum.courseName.toString(),
-                                    maxLines: 1,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.white),
+                            child: ((datum.modul != null)
+                                ? Wrap(
+                                    children: [
+                                      Text(
+                                        showFullName
+                                            ? "${(RegExp(r'^[0-9]{1,4}$').hasMatch(datum.modul.toString()) ? 'Modul' : '')} ${datum.modul} bei "
+                                            : datum.modul.toString(),
+                                        maxLines: 1,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.white),
+                                      ),
+                                      Text(
+                                        showFullName
+                                            ? datum.teacher.toString()
+                                            : '',
+                                        maxLines: 1,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            color: Color.fromARGB(
+                                                255, 229, 206, 255)),
+                                      )
+                                    ],
                                   )
                                 : const Icon(
                                     Icons.question_mark_rounded,
@@ -279,11 +280,11 @@ class _HomePageState extends State<HomePage> {
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(999))),
                               padding: const EdgeInsets.all(5),
-                              child: iconTimex(
-                                  parseTime(datum.lessonStart.toString(),
-                                      datum.lessonDate.toString()),
-                                  parseTime(datum.lessonEnd.toString(),
-                                      datum.lessonDate.toString())),
+                              // child: iconTimex(
+                              //     parseTime(datum.start.toString(),
+                              //         datum.lessonDate.toString()),
+                              //     parseTime(datum.lessonEnd.toString(),
+                              //         datum.lessonDate.toString())),
                             )),
                       ])),
                   /**
@@ -297,15 +298,22 @@ class _HomePageState extends State<HomePage> {
                         Container(
                           margin: const EdgeInsets.only(right: 10),
                           child: Text(
-                            datum.roomName.toString(),
+                            datum.room.toString(),
                             style: const TextStyle(color: Colors.redAccent),
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(right: 10),
+                          child: Text(
+                            datum.className.toString(),
+                            style: const TextStyle(color: Colors.blueAccent),
                           ),
                         ),
                         /**
                          * ROW TIME
                          */
                         Text(
-                          "${stingifyTime(parseTime(datum.lessonStart.toString(), datum.lessonDate.toString()))} - ${stingifyTime(parseTime(datum.lessonEnd.toString(), datum.lessonDate.toString()))}",
+                          "${datum.start} - ${datum.end}",
                           style: const TextStyle(color: Colors.white),
                           maxLines: 1,
                         )
@@ -314,77 +322,12 @@ class _HomePageState extends State<HomePage> {
                   )
                 ],
               )),
-          /**
-           * ROW Functions
-           */
-          Container(
-              alignment: Alignment.centerRight,
-              margin: const EdgeInsets.only(left: 10),
-              child: Wrap(
-                direction: Axis.vertical,
-                spacing: 10,
-                children: [
-                  ...datum.teacherId!.map((teacherId) {
-                    String teachersFullName = datum
-                        .teacherFullName![datum.teacherId!.indexOf(teacherId)]!;
-                    String initials = teachersFullName
-                        .split(" ")
-                        .map((e) => e[0])
-                        .join("")
-                        .toUpperCase();
-                    return ElevatedButton(
-                        onPressed: () {
-                          openTeacher(teacherId!, teachersFullName);
-                        },
-                        child: Row(
-                          children: [
-                            Text(initials),
-                            const Icon(
-                              Icons.school_rounded,
-                              color: Colors.white,
-                            )
-                          ],
-                        ));
-                  }),
-                ],
-              )),
         ]),
       );
 
       /**
        * ADDITIONAL INFOS
        */
-      if (showWeekDay) {
-        return Column(
-          children: [
-            Container(
-                margin: const EdgeInsets.fromLTRB(0, 40, 0, 0),
-                child: Text(
-                  weekDay,
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color:
-                          (isActiveDay == true) ? Colors.green : Colors.white),
-                )),
-            listTile
-          ],
-        );
-      }
-
-      if (showPauseBefore) {
-        return Column(
-          children: [
-            Container(
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                width: double.infinity,
-                child: Text(
-                  "$currentPause min Pause",
-                  style: const TextStyle(color: Colors.white),
-                )),
-            listTile
-          ],
-        );
-      }
 
       return listTile;
     }).toList();
@@ -401,11 +344,35 @@ class _HomePageState extends State<HomePage> {
             alignment: Alignment.topLeft,
             width: double.infinity,
             height: double.infinity,
-            child: ((api.runtimeType != Api)
+            child: ((api.runtimeType != BBWApi)
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
-                : ListView(children: [...listItems]))),
+                : ListView(children: [
+                    Center(
+                      child: DropdownButton<String>(
+                        value: dropdownValue,
+                        icon: const Icon(Icons.arrow_downward),
+                        elevation: 16,
+                        style: const TextStyle(color: Colors.deepPurple),
+                        underline: Container(
+                          height: 2,
+                          color: Colors.deepPurpleAccent,
+                        ),
+                        onChanged: (String? value) {
+                          selectClass(value!);
+                        },
+                        items: classNames
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                    ...listItems
+                  ]))),
         Positioned(
             top: 10,
             left: 0,

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data_seed.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,7 +22,9 @@ class _LicenceState extends State<Licence> {
     return http.get(Uri.parse(data.licenceApi));
   }
 
+  @override
   void initState() {
+    super.initState();
     SharedPreferences.getInstance().then((prefs) {
       //by default show cached
       setState(() {
@@ -51,10 +52,10 @@ class _LicenceState extends State<Licence> {
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Container(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: Text(
             text.toString(),
-            style: TextStyle(color: Colors.white, fontSize: 14),
+            style: const TextStyle(color: Colors.white, fontSize: 14),
           ),
         ),
       ),

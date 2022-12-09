@@ -1,0 +1,13 @@
+flutter_app: 
+  command: stundenplan
+  arch: x64
+  parent: /usr/local/lib
+
+control:
+  Package: 2I-Stundenplan
+  Version: 1.0.5
+  Architecture: amd64
+  Essential: no
+  Priority: optional
+  Maintainer: Kirari04
+  Description: Zeigt den Stundenplan der Klasse 2I an
