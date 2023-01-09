@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/bbw.dart';
 import 'package:flutter_application_1/data_seed.dart';
 import 'package:flutter_application_1/home.dart';
 import 'package:flutter_application_1/license.dart';
+import 'package:flutter_application_1/versionChecker.dart';
 
 class LocalRouter extends StatefulWidget {
   const LocalRouter({super.key});
@@ -56,7 +59,9 @@ class _LocalRouterState extends State<LocalRouter> {
   void initState() {
     super.initState();
 
-    setDesktopWindowSize();
+    if (Platform.isWindows) {
+      setDesktopWindowSize();
+    }
   }
 
   @override
@@ -101,7 +106,12 @@ class _LocalRouterState extends State<LocalRouter> {
                     opacity: selEl ? 1 : 0,
                     child: e.obj,
                   ));
-            }).toList()
+            }).toList(),
+            const Positioned(
+              top: 0,
+              left: 0,
+              child: VersionChecker(),
+            ),
           ]),
       bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.black87,

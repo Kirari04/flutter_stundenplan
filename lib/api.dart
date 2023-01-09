@@ -109,7 +109,7 @@ class Datum {
   String? lessonEnd;
   String? lessonDuration;
   String? nbrOfModifiedLessons;
-  int? connectedId;
+  String? connectedId;
   int? isAllDay;
   int? timetableEntryTypeId;
   String? timetableEntryType;
