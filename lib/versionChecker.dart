@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -15,6 +16,7 @@ class _VersionCheckerState extends State<VersionChecker> {
 
   static const String VERSION = '1.06';
   bool showNewVersion = false;
+  String msg = '';
 
   Future<http.Response> fetchVersion() {
     return http.get(Uri.parse(
@@ -26,6 +28,7 @@ class _VersionCheckerState extends State<VersionChecker> {
     if (res.statusCode == 200) {
       if (res.body != VERSION) {
         setState(() {
+          msg = " - Your: $VERSION vs Newest: ${res.body}";
           showNewVersion = true;
         });
       }
@@ -44,9 +47,9 @@ class _VersionCheckerState extends State<VersionChecker> {
         ? Container(
             padding: const EdgeInsets.all(10),
             child: InkWell(
-                child: const Text(
-                  "New Version Available!",
-                  style: TextStyle(color: Colors.red, fontSize: 14),
+                child: Text(
+                  "New Version Available! $msg",
+                  style: const TextStyle(color: Colors.red, fontSize: 14),
                 ),
                 onTap: () {
                   launchUrl(Uri.parse(
