@@ -1,3 +1,4 @@
+import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/bbw.dart';
 import 'package:flutter_application_1/data_seed.dart';
@@ -46,19 +47,16 @@ class _LocalRouterState extends State<LocalRouter> {
   bool globalLoading = false;
   DataSeed data = DataSeed();
 
-  void openLicence() async {
-    setState(() {
-      globalLoading = true;
-    });
-    Navigator.of(context).push(MaterialPageRoute(
-      settings: const RouteSettings(name: '/licence'),
-      builder: (_) {
-        return const Licence();
-      },
-    ));
-    setState(() {
-      globalLoading = false;
-    });
+  void setDesktopWindowSize() {
+    DesktopWindow.setWindowSize(const Size(500, 1000));
+    DesktopWindow.setMinWindowSize(const Size(400, 400));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    setDesktopWindowSize();
   }
 
   @override
