@@ -14,7 +14,7 @@ class VersionChecker extends StatefulWidget {
 class _VersionCheckerState extends State<VersionChecker> {
   _VersionCheckerState();
 
-  static const String VERSION = '1.06';
+  static const String VERSION = '1.08';
   bool showNewVersion = false;
   String msg = '';
 
@@ -47,14 +47,17 @@ class _VersionCheckerState extends State<VersionChecker> {
         ? Container(
             padding: const EdgeInsets.all(10),
             child: InkWell(
-                child: Text(
-                  "New Version Available! $msg",
-                  style: const TextStyle(color: Colors.red, fontSize: 14),
-                ),
-                onTap: () {
-                  launchUrl(Uri.parse(
-                      'https://docs.flutter.io/flutter/services/UrlLauncher-class.html'));
-                }),
+              child: Text(
+                "New Version Available! $msg",
+                style: const TextStyle(color: Colors.red, fontSize: 14),
+              ),
+              onTap: () {
+                launchUrl(
+                    Uri.parse(
+                        'https://github.com/Kirari04/flutter_stundenplan/releases'),
+                    mode: LaunchMode.externalApplication);
+              },
+            ),
           )
         : const SizedBox.shrink();
   }
