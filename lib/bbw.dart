@@ -3,7 +3,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/teacher.dart';
 import 'package:flutter_application_1/data_seed.dart';
 import 'package:flutter_application_1/bbwApi.dart';
 import 'package:intl/intl.dart';
@@ -127,7 +126,7 @@ class _BBWPageState extends State<BBWPage> {
     http.Response res = await fetchApi();
     if (res.statusCode == 200) {
       BBWApi tmpApi = BBWApi.fromRawJson(res.body);
-      if (tmpApi.data.length > 0) {
+      if (tmpApi.data.isNotEmpty) {
         prefs.setString('bbwApiData', res.body);
         if (apiOldData == null) {
           setState(() {

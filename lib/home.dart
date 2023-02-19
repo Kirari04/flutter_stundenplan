@@ -38,8 +38,13 @@ class _HomePageState extends State<HomePage> {
   List<Widget> listItems = [];
   bool showFullName = false;
 
+  String username = "";
+  String password = "";
+
   Future<http.Response> fetchApi() {
-    return http.get(Uri.parse(data.api));
+    return http.post(Uri.parse(data.api),
+        headers: <String, String>{},
+        body: <String, String>{'username': username, 'password': password});
   }
 
   Future<http.Response> fetchTeacherApi(int teacherId) {
@@ -92,8 +97,15 @@ class _HomePageState extends State<HomePage> {
   void setup() async {
     //get cache
     final prefs = await SharedPreferences.getInstance();
+    final oldUsername = prefs.getString('username');
+    final oldPassword = prefs.getString('password');
+
     final apiOldData = prefs.getString('apiData');
     setState(() {
+      if (oldUsername != null && oldPassword != null) {
+        username = oldUsername;
+        password = oldPassword;
+      }
       if (apiOldData != null) {
         api = Api.fromRawJson(apiOldData);
         listItems = listItemsBuild(api!);
@@ -173,7 +185,7 @@ class _HomePageState extends State<HomePage> {
 
     return apiData.data.map((datum) {
       if (datum.lessonDate == null) {
-        return ListTile(
+        return const ListTile(
           title: Text(
             "Failed to render",
             style: TextStyle(color: Colors.red),

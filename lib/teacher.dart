@@ -21,8 +21,8 @@ class Teacher extends StatefulWidget {
 }
 
 class _TeacherState extends State<Teacher> {
-  String title;
-  int teacherId;
+  final String title;
+  final int teacherId;
   Api? api;
   bool isLoading = false;
   DataSeed data = DataSeed();

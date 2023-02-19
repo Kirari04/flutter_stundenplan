@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final api = apiFromJson(jsonString);
-
 import 'dart:convert';
 
 class BBWApi {
