@@ -8,6 +8,10 @@
 </p>
 
 ## Build Application
+Install dependencies
+```bash
+flutter pub get
+```
 
 ### Android
 ```bash
