@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data_seed.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Licence extends StatefulWidget {
   const Licence({super.key});
@@ -53,9 +55,55 @@ class _LicenceState extends State<Licence> {
         scrollDirection: Axis.vertical,
         child: Container(
           padding: const EdgeInsets.all(10),
-          child: Text(
-            text.toString(),
-            style: const TextStyle(color: Colors.white, fontSize: 14),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: InkWell(
+                  child: const Text(
+                    "Source: https://github.com/Kirari04/flutter_stundenplan",
+                    style: TextStyle(color: Colors.blue),
+                  ),
+                  onTap: () {
+                    launchUrl(
+                        Uri.parse(
+                            'https://github.com/Kirari04/flutter_stundenplan'),
+                        mode: LaunchMode.externalApplication);
+                  },
+                ),
+              ),
+              MarkdownBody(
+                  data: text.toString(),
+                  selectable: true,
+                  styleSheet: MarkdownStyleSheet(
+                    a: const TextStyle(color: Colors.blue),
+                    p: const TextStyle(color: Colors.white),
+                    h1Align: WrapAlignment.center,
+                    h1: const TextStyle(
+                      color: Colors.white,
+                      backgroundColor: Colors.transparent,
+                      fontWeight: FontWeight.normal,
+                    ),
+                    h2Align: WrapAlignment.center,
+                    h2: const TextStyle(
+                      color: Colors.white,
+                      backgroundColor: Colors.transparent,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    h3Align: WrapAlignment.center,
+                    h3: const TextStyle(
+                      color: Colors.white,
+                      backgroundColor: Colors.transparent,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    h4Align: WrapAlignment.center,
+                    h4: const TextStyle(
+                      color: Colors.white,
+                      backgroundColor: Colors.transparent,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ))
+            ],
           ),
         ),
       ),

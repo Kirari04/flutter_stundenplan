@@ -38,8 +38,12 @@ class _HomePageState extends State<HomePage> {
   List<Widget> listItems = [];
   bool showFullName = false;
 
+  String username = "";
+  String password = "";
+
   Future<http.Response> fetchApi() {
-    return http.get(Uri.parse(data.api));
+    return http.post(Uri.parse(data.api),
+        body: <String, String>{'username': username, 'password': password});
   }
 
   Future<http.Response> fetchTeacherApi(int teacherId) {
@@ -92,15 +96,28 @@ class _HomePageState extends State<HomePage> {
   void setup() async {
     //get cache
     final prefs = await SharedPreferences.getInstance();
+    final oldUsername = prefs.getString('username');
+    final oldPassword = prefs.getString('password');
+
     final apiOldData = prefs.getString('apiData');
     setState(() {
+      if (oldUsername != null && oldPassword != null) {
+        username = oldUsername;
+        password = oldPassword;
+      }
       if (apiOldData != null) {
         api = Api.fromRawJson(apiOldData);
         listItems = listItemsBuild(api!);
       }
     });
 
-    //update cache
+    //update cache only if loggedin
+    if (username != "" && password != "") {
+      updateApiData(prefs, apiOldData);
+    }
+  }
+
+  void updateApiData(SharedPreferences prefs, String? apiOldData) async {
     setState(() {
       isLoading = true;
     });
@@ -115,7 +132,13 @@ class _HomePageState extends State<HomePage> {
             listItems = listItemsBuild(api!);
           });
         }
+      } else {
+        print("failed to fetch because of response code: " +
+            tmpApi.status.toString());
       }
+    } else {
+      print("failed to fetch because of status code: " +
+          res.statusCode.toString());
     }
     setState(() {
       isLoading = false;
@@ -171,9 +194,20 @@ class _HomePageState extends State<HomePage> {
     lessonTimes = [];
     mapIndex = -1;
 
+    if (apiData.status == 0) {
+      return [
+        const ListTile(
+          title: Text(
+            "Failed to Fetch Data",
+            style: TextStyle(color: Colors.red),
+          ),
+        )
+      ];
+    }
+
     return apiData.data.map((datum) {
       if (datum.lessonDate == null) {
-        return ListTile(
+        return const ListTile(
           title: Text(
             "Failed to render",
             style: TextStyle(color: Colors.red),
@@ -292,11 +326,17 @@ class _HomePageState extends State<HomePage> {
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(999))),
                               padding: const EdgeInsets.all(5),
-                              child: iconTimex(
-                                  parseTime(datum.lessonStart.toString(),
-                                      datum.lessonDate.toString()),
-                                  parseTime(datum.lessonEnd.toString(),
-                                      datum.lessonDate.toString())),
+                              child: datum.timetableEntryTypeShort == "cancel"
+                                  ? const Icon(
+                                      Icons.cancel_outlined,
+                                      color: Colors.red,
+                                      size: 15,
+                                    )
+                                  : iconTimex(
+                                      parseTime(datum.lessonStart.toString(),
+                                          datum.lessonDate.toString()),
+                                      parseTime(datum.lessonEnd.toString(),
+                                          datum.lessonDate.toString())),
                             )),
                       ])),
                   /**
@@ -418,7 +458,15 @@ class _HomePageState extends State<HomePage> {
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
-                : ListView(children: [...listItems]))),
+                : (username == "")
+                    ? const Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Text(
+                          "Der KBW Stundenplan kann erst angezeigt werden wenn du angemeldet bist!",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      )
+                    : ListView(children: [...listItems]))),
         Positioned(
             top: 10,
             left: 0,

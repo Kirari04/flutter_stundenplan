@@ -21,8 +21,8 @@ class Teacher extends StatefulWidget {
 }
 
 class _TeacherState extends State<Teacher> {
-  String title;
-  int teacherId;
+  final String title;
+  final int teacherId;
   Api? api;
   bool isLoading = false;
   DataSeed data = DataSeed();
@@ -235,10 +235,23 @@ class _TeacherState extends State<Teacher> {
                                         fontWeight: FontWeight.w600,
                                         color: Colors.white),
                                   )
-                                : const Icon(
-                                    Icons.question_mark_rounded,
-                                    color: Colors.white,
-                                  )),
+                                : ((datum.title != null)
+                                    ? (showFullName
+                                        ? Text(
+                                            datum.title.toString(),
+                                            maxLines: 1,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.white),
+                                          )
+                                        : const Icon(
+                                            Icons.more,
+                                            color: Colors.red,
+                                          ))
+                                    : const Icon(
+                                        Icons.question_mark_rounded,
+                                        color: Colors.white,
+                                      ))),
                           ),
                         ),
                         Positioned(
@@ -250,11 +263,17 @@ class _TeacherState extends State<Teacher> {
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(999))),
                               padding: const EdgeInsets.all(5),
-                              child: iconTimex(
-                                  parseTime(datum.lessonStart.toString(),
-                                      datum.lessonDate.toString()),
-                                  parseTime(datum.lessonEnd.toString(),
-                                      datum.lessonDate.toString())),
+                              child: datum.timetableEntryTypeShort == "cancel"
+                                  ? const Icon(
+                                      Icons.cancel_outlined,
+                                      color: Colors.red,
+                                      size: 15,
+                                    )
+                                  : iconTimex(
+                                      parseTime(datum.lessonStart.toString(),
+                                          datum.lessonDate.toString()),
+                                      parseTime(datum.lessonEnd.toString(),
+                                          datum.lessonDate.toString())),
                             )),
                       ])),
                   /**

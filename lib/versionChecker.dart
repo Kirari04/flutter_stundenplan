@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -14,7 +13,7 @@ class VersionChecker extends StatefulWidget {
 class _VersionCheckerState extends State<VersionChecker> {
   _VersionCheckerState();
 
-  static const String VERSION = '1.08';
+  static const String VERSION = '1.09';
   bool showNewVersion = false;
   String msg = '';
 

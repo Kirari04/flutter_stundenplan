@@ -19,6 +19,9 @@ class _MyAppState extends State<MyApp> {
         title: '2I Stundenplan',
         theme: ThemeData(
           primarySwatch: Colors.blue,
+          textTheme: const TextTheme(
+            subtitle1: TextStyle(color: Colors.white),
+          ),
         ),
         home: const LocalRouter());
   }

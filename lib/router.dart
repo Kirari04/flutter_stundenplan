@@ -8,6 +8,8 @@ import 'package:flutter_application_1/home.dart';
 import 'package:flutter_application_1/license.dart';
 import 'package:flutter_application_1/versionChecker.dart';
 
+import 'login.dart';
+
 class LocalRouter extends StatefulWidget {
   const LocalRouter({super.key});
 
@@ -40,6 +42,8 @@ class _LocalRouterState extends State<LocalRouter> {
         icon: Icons.home_rounded),
     LocalRouterItem(
         loc: '/bbw', name: 'BBW', obj: const BBWPage(), icon: Icons.computer),
+    LocalRouterItem(
+        loc: '/login', name: 'Login', obj: const Login(), icon: Icons.login),
     LocalRouterItem(
         loc: '/licence',
         name: 'Licence',
@@ -113,24 +117,29 @@ class _LocalRouterState extends State<LocalRouter> {
               child: VersionChecker(),
             ),
           ]),
-      bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.black87,
-          currentIndex: index,
-          unselectedItemColor: Colors.white,
-          selectedItemColor: Colors.white,
-          onTap: (newIndex) {
-            setState(() {
-              index = newIndex;
-            });
-          },
-          items: localRouter
-              .map((item) => BottomNavigationBarItem(
-                  icon: Icon(
-                    item.icon,
-                    color: Colors.white,
-                  ),
-                  label: item.name))
-              .toList()),
+      bottomNavigationBar: new Theme(
+        data: Theme.of(context).copyWith(
+          canvasColor: Colors.black54,
+        ),
+        child: BottomNavigationBar(
+            backgroundColor: Colors.grey,
+            currentIndex: index,
+            // unselectedItemColor: Colors.white,
+            // selectedItemColor: Colors.white,
+            onTap: (newIndex) {
+              setState(() {
+                index = newIndex;
+              });
+            },
+            items: localRouter
+                .map((item) => BottomNavigationBarItem(
+                    icon: Icon(
+                      item.icon,
+                      color: Color.fromARGB(255, 255, 255, 255),
+                    ),
+                    label: item.name))
+                .toList()),
+      ),
     );
   }
 }

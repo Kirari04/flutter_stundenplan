@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 class DataSeed {
   String title = "2I Stundenplan";
 
-  String api = "https://kbw.senpai.one/tmp.json";
+  String api = "https://kbw.senpai.one/api/api.php";
   String teacherApi = "https://kbw.senpai.one/api/teacher.php?teacher=";
 
   String bbwApi = "https://bbw.senpai.one/";
 
   String licenceApi =
-      "https://raw.githubusercontent.com/Kirari04/flutter_stundenplan/master/LICENSE";
+      "https://raw.githubusercontent.com/Kirari04/flutter_stundenplan/master/LICENSE.md";
 
   static Color getCourseColor(String course) {
     switch (course.toUpperCase()) {
