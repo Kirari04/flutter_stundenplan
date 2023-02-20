@@ -235,10 +235,23 @@ class _TeacherState extends State<Teacher> {
                                         fontWeight: FontWeight.w600,
                                         color: Colors.white),
                                   )
-                                : const Icon(
-                                    Icons.question_mark_rounded,
-                                    color: Colors.white,
-                                  )),
+                                : ((datum.title != null)
+                                    ? (showFullName
+                                        ? Text(
+                                            datum.title.toString(),
+                                            maxLines: 1,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.white),
+                                          )
+                                        : const Icon(
+                                            Icons.more,
+                                            color: Colors.red,
+                                          ))
+                                    : const Icon(
+                                        Icons.question_mark_rounded,
+                                        color: Colors.white,
+                                      ))),
                           ),
                         ),
                         Positioned(
