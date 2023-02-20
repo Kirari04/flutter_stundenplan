@@ -13,7 +13,7 @@ class VersionChecker extends StatefulWidget {
 class _VersionCheckerState extends State<VersionChecker> {
   _VersionCheckerState();
 
-  static const String VERSION = '1.08';
+  static const String VERSION = '1.09';
   bool showNewVersion = false;
   String msg = '';
 
