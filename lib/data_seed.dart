@@ -9,7 +9,7 @@ class DataSeed {
   String bbwApi = "https://bbw.senpai.one/";
 
   String licenceApi =
-      "https://raw.githubusercontent.com/Kirari04/flutter_stundenplan/master/LICENSE";
+      "https://raw.githubusercontent.com/Kirari04/flutter_stundenplan/master/LICENSE.md";
 
   static Color getCourseColor(String course) {
     switch (course.toUpperCase()) {
