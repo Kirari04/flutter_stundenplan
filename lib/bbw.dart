@@ -347,31 +347,43 @@ class _BBWPageState extends State<BBWPage> {
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
-                : ListView(children: [
-                    Center(
-                      child: DropdownButton<String>(
-                        value: dropdownValue,
-                        icon: const Icon(Icons.arrow_downward),
-                        elevation: 16,
-                        style: const TextStyle(color: Colors.deepPurple),
-                        underline: Container(
-                          height: 2,
-                          color: Colors.deepPurpleAccent,
+                : (listItems.length == 0)
+                    ? const Text(
+                        "Momentan sind keine Daten online",
+                        style: TextStyle(color: Colors.red),
+                      )
+                    : ListView(children: [
+                        Container(
+                          padding: const EdgeInsets.only(left: 20, right: 20),
+                          child: const Text(
+                            "Dieser Stundenplan zeigt die Zimmerbelegung aller Klassen des aktuellen Tages.",
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
-                        onChanged: (String? value) {
-                          selectClass(value!);
-                        },
-                        items: classNames
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                    ...listItems
-                  ]))),
+                        Center(
+                          child: DropdownButton<String>(
+                            value: dropdownValue,
+                            icon: const Icon(Icons.arrow_downward),
+                            elevation: 16,
+                            style: const TextStyle(color: Colors.deepPurple),
+                            underline: Container(
+                              height: 2,
+                              color: Colors.deepPurpleAccent,
+                            ),
+                            onChanged: (String? value) {
+                              selectClass(value!);
+                            },
+                            items: classNames
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                        ...listItems
+                      ]))),
         Positioned(
             top: 10,
             left: 0,

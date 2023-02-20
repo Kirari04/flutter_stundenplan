@@ -456,7 +456,7 @@ class _HomePageState extends State<HomePage> {
                     ? const Padding(
                         padding: EdgeInsets.all(20),
                         child: Text(
-                          "Der Stundenplan kann erst angezeigt werden wenn du angemeldet bist!",
+                          "Der KBW Stundenplan kann erst angezeigt werden wenn du angemeldet bist!",
                           style: TextStyle(color: Colors.white),
                         ),
                       )
