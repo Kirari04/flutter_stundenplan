@@ -43,7 +43,6 @@ class _HomePageState extends State<HomePage> {
 
   Future<http.Response> fetchApi() {
     return http.post(Uri.parse(data.api),
-        headers: <String, String>{},
         body: <String, String>{'username': username, 'password': password});
   }
 
@@ -112,7 +111,13 @@ class _HomePageState extends State<HomePage> {
       }
     });
 
-    //update cache
+    //update cache only if loggedin
+    if (username != "" && password != "") {
+      updateApiData(prefs, apiOldData);
+    }
+  }
+
+  void updateApiData(SharedPreferences prefs, String? apiOldData) async {
     setState(() {
       isLoading = true;
     });
@@ -127,7 +132,13 @@ class _HomePageState extends State<HomePage> {
             listItems = listItemsBuild(api!);
           });
         }
+      } else {
+        print("failed to fetch because of response code: " +
+            tmpApi.status.toString());
       }
+    } else {
+      print("failed to fetch because of status code: " +
+          res.statusCode.toString());
     }
     setState(() {
       isLoading = false;
@@ -182,6 +193,17 @@ class _HomePageState extends State<HomePage> {
     isFirstLesson = {};
     lessonTimes = [];
     mapIndex = -1;
+
+    if (apiData.status == 0) {
+      return [
+        const ListTile(
+          title: Text(
+            "Failed to Fetch Data",
+            style: TextStyle(color: Colors.red),
+          ),
+        )
+      ];
+    }
 
     return apiData.data.map((datum) {
       if (datum.lessonDate == null) {
@@ -430,7 +452,15 @@ class _HomePageState extends State<HomePage> {
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
-                : ListView(children: [...listItems]))),
+                : (username == "")
+                    ? const Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Text(
+                          "Der Stundenplan kann erst angezeigt werden wenn du angemeldet bist!",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      )
+                    : ListView(children: [...listItems]))),
         Positioned(
             top: 10,
             left: 0,

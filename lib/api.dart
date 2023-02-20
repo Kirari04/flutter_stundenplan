@@ -13,7 +13,14 @@ class Api {
   int? status;
   List<Datum> data;
 
-  factory Api.fromRawJson(String str) => Api.fromJson(json.decode(str));
+  factory Api.fromRawJson(String str) {
+    try {
+      return Api.fromJson(json.decode(str));
+    } catch (e) {
+      print("Some error happened: " + e.toString());
+      return Api(data: [], status: 0);
+    }
+  }
 
   factory Api.fromJson(Map<String, dynamic> json) => Api(
         status: json["status"],
