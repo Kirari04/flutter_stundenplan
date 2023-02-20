@@ -263,11 +263,17 @@ class _TeacherState extends State<Teacher> {
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(999))),
                               padding: const EdgeInsets.all(5),
-                              child: iconTimex(
-                                  parseTime(datum.lessonStart.toString(),
-                                      datum.lessonDate.toString()),
-                                  parseTime(datum.lessonEnd.toString(),
-                                      datum.lessonDate.toString())),
+                              child: datum.timetableEntryTypeShort == "cancel"
+                                  ? const Icon(
+                                      Icons.cancel_outlined,
+                                      color: Colors.red,
+                                      size: 15,
+                                    )
+                                  : iconTimex(
+                                      parseTime(datum.lessonStart.toString(),
+                                          datum.lessonDate.toString()),
+                                      parseTime(datum.lessonEnd.toString(),
+                                          datum.lessonDate.toString())),
                             )),
                       ])),
                   /**
