@@ -451,22 +451,33 @@ class _HomePageState extends State<HomePage> {
     return Stack(
       children: [
         Container(
-            alignment: Alignment.topLeft,
-            width: double.infinity,
-            height: double.infinity,
-            child: ((api.runtimeType != Api)
-                ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : (username == "")
-                    ? const Padding(
-                        padding: EdgeInsets.all(20),
-                        child: Text(
-                          "Der KBW Stundenplan kann erst angezeigt werden wenn du angemeldet bist!",
-                          style: TextStyle(color: Colors.white),
+          alignment: Alignment.topLeft,
+          width: double.infinity,
+          height: double.infinity,
+          child: (api.runtimeType != Api)
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : (username == "")
+                  ? const Padding(
+                      padding: EdgeInsets.all(20),
+                      child: Text(
+                        "Der KBW Stundenplan kann erst angezeigt werden wenn du angemeldet bist!",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    )
+                  : ListView(children: [
+                      ListTile(
+                        title: Text(
+                          "Stundenplan von ${username.toString().split(".")[0].toUpperCase()}",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      )
-                    : ListView(children: [...listItems]))),
+                      ),
+                      ...listItems
+                    ]),
+        ),
         Positioned(
             top: 10,
             left: 0,
