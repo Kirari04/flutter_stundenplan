@@ -40,7 +40,10 @@ class _LoginState extends State<Login> {
         username = prefs.getString('username');
         password = prefs.getString('password');
 
-        if (username != "" && password != "") {
+        if (username != "" &&
+            password != "" &&
+            username != null &&
+            password != null) {
           isAuth = true;
         }
       });
