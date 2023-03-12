@@ -89,7 +89,8 @@ class _LoginState extends State<Login> {
                               color: Colors.grey,
                             )),
                             labelStyle: TextStyle(color: Colors.white),
-                            labelText: 'Enter your username',
+                            labelText:
+                                'Intranet Benutzername (vorname.nachname)',
                           ),
                         ),
                         Padding(
@@ -98,6 +99,9 @@ class _LoginState extends State<Login> {
                             onChanged: (value) {
                               password = value.toString();
                             },
+                            obscureText: true,
+                            enableSuggestions: false,
+                            autocorrect: false,
                             style: const TextStyle(color: Colors.white),
                             decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
@@ -106,7 +110,7 @@ class _LoginState extends State<Login> {
                                   color: Colors.grey,
                                 )),
                                 labelStyle: TextStyle(color: Colors.white),
-                                labelText: 'Enter your Password',
+                                labelText: 'Intranet Passwort',
                                 focusColor: Colors.white),
                           ),
                         ),
