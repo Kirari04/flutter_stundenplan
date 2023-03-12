@@ -122,7 +122,7 @@ class _LocalRouterState extends State<LocalRouter> {
               child: VersionChecker(),
             ),
           ]),
-      bottomNavigationBar: new Theme(
+      bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(
           canvasColor: Colors.black54,
         ),
@@ -140,7 +140,7 @@ class _LocalRouterState extends State<LocalRouter> {
                 .map((item) => BottomNavigationBarItem(
                     icon: Icon(
                       item.icon,
-                      color: Color.fromARGB(255, 255, 255, 255),
+                      color: const Color.fromARGB(255, 255, 255, 255),
                     ),
                     label: item.name))
                 .toList()),
