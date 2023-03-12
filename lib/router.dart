@@ -50,6 +50,7 @@ class _LocalRouterState extends State<LocalRouter> {
         obj: const Licence(),
         icon: Icons.copyright_rounded),
   ];
+  bool kisweb = false;
   bool isLoading = false;
   bool globalLoading = false;
   DataSeed data = DataSeed();
@@ -63,15 +64,19 @@ class _LocalRouterState extends State<LocalRouter> {
   void initState() {
     super.initState();
 
-    if (Platform.isWindows) {
-      setDesktopWindowSize();
+    try {
+      if (Platform.isWindows) {
+        setDesktopWindowSize();
+      }
+    } catch (e) {
+      kisweb = true;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black12,
+      backgroundColor: const Color(0xFF0A080F),
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
         child: AppBar(

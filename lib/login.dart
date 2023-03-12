@@ -40,7 +40,10 @@ class _LoginState extends State<Login> {
         username = prefs.getString('username');
         password = prefs.getString('password');
 
-        if (username != "" && password != "") {
+        if (username != "" &&
+            password != "" &&
+            username != null &&
+            password != null) {
           isAuth = true;
         }
       });
@@ -50,10 +53,11 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      alignment: Alignment.topLeft,
+      alignment: Alignment.topCenter,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Container(
+          constraints: const BoxConstraints(maxWidth: 500),
           padding: const EdgeInsets.all(10),
           child: Column(
             children: [
@@ -197,7 +201,7 @@ class _LoginState extends State<Login> {
                             prefs.setString('password', "");
                           });
                         },
-                        child: const Text(
+                        child: Text(
                           "Abmelden",
                           style: TextStyle(color: Colors.white),
                         ),
