@@ -53,10 +53,11 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      alignment: Alignment.topLeft,
+      alignment: Alignment.topCenter,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Container(
+          constraints: const BoxConstraints(maxWidth: 500),
           padding: const EdgeInsets.all(10),
           child: Column(
             children: [
@@ -88,7 +89,8 @@ class _LoginState extends State<Login> {
                               color: Colors.grey,
                             )),
                             labelStyle: TextStyle(color: Colors.white),
-                            labelText: 'Enter your username',
+                            labelText:
+                                'Intranet Benutzername (vorname.nachname)',
                           ),
                         ),
                         Padding(
@@ -97,6 +99,9 @@ class _LoginState extends State<Login> {
                             onChanged: (value) {
                               password = value.toString();
                             },
+                            obscureText: true,
+                            enableSuggestions: false,
+                            autocorrect: false,
                             style: const TextStyle(color: Colors.white),
                             decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
@@ -105,7 +110,7 @@ class _LoginState extends State<Login> {
                                   color: Colors.grey,
                                 )),
                                 labelStyle: TextStyle(color: Colors.white),
-                                labelText: 'Enter your Password',
+                                labelText: 'Intranet Passwort',
                                 focusColor: Colors.white),
                           ),
                         ),
@@ -200,7 +205,7 @@ class _LoginState extends State<Login> {
                             prefs.setString('password', "");
                           });
                         },
-                        child: const Text(
+                        child: Text(
                           "Abmelden",
                           style: TextStyle(color: Colors.white),
                         ),

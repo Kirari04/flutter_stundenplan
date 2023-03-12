@@ -17,7 +17,7 @@ class Api {
     try {
       return Api.fromJson(json.decode(str));
     } catch (e) {
-      print("Some error happened: " + e.toString());
+      //print("Some error happened: " + e.toString());
       return Api(data: [], status: 0);
     }
   }

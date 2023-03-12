@@ -38,12 +38,14 @@ class _HomePageState extends State<HomePage> {
   List<Widget> listItems = [];
   bool showFullName = false;
 
-  String username = "";
-  String password = "";
+  String? username = "";
+  String? password = "";
 
   Future<http.Response> fetchApi() {
-    return http.post(Uri.parse(data.api),
-        body: <String, String>{'username': username, 'password': password});
+    return http.post(Uri.parse(data.api), body: <String, String>{
+      'username': username.toString(),
+      'password': password.toString()
+    });
   }
 
   Future<http.Response> fetchTeacherApi(int teacherId) {
@@ -112,7 +114,7 @@ class _HomePageState extends State<HomePage> {
     });
 
     //update cache only if loggedin
-    if (username != "" && password != "") {
+    if (username != null && password != null) {
       updateApiData(prefs, apiOldData);
     }
   }
@@ -454,17 +456,17 @@ class _HomePageState extends State<HomePage> {
           alignment: Alignment.topLeft,
           width: double.infinity,
           height: double.infinity,
-          child: (api.runtimeType != Api)
-              ? const Center(
-                  child: CircularProgressIndicator(),
+          child: (username == null || username == "null" || username == "")
+              ? Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Text(
+                    "Der KBW Stundenplan kann erst angezeigt werden wenn du angemeldet bist! ${username}",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 )
-              : (username == "")
-                  ? const Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Text(
-                        "Der KBW Stundenplan kann erst angezeigt werden wenn du angemeldet bist!",
-                        style: TextStyle(color: Colors.white),
-                      ),
+              : ((api.runtimeType != Api)
+                  ? const Center(
+                      child: CircularProgressIndicator(),
                     )
                   : ListView(children: [
                       ListTile(
@@ -476,7 +478,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       ...listItems
-                    ]),
+                    ])),
         ),
         Positioned(
             top: 10,

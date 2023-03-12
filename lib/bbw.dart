@@ -123,18 +123,24 @@ class _BBWPageState extends State<BBWPage> {
     setState(() {
       isLoading = true;
     });
-    http.Response res = await fetchApi();
-    if (res.statusCode == 200) {
-      BBWApi tmpApi = BBWApi.fromRawJson(res.body);
-      if (tmpApi.data.isNotEmpty) {
-        prefs.setString('bbwApiData', res.body);
-        if (apiOldData == null) {
-          setState(() {
-            api = tmpApi;
-            listItems = listItemsBuild(api!);
-          });
+    try {
+      http.Response res = await fetchApi();
+      if (res.statusCode == 200) {
+        BBWApi tmpApi = BBWApi.fromRawJson(res.body);
+        if (tmpApi.data.isNotEmpty) {
+          prefs.setString('bbwApiData', res.body);
+          if (apiOldData == null) {
+            setState(() {
+              api = tmpApi;
+              listItems = listItemsBuild(api!);
+            });
+          }
         }
       }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
     }
     setState(() {
       isLoading = false;
@@ -343,47 +349,45 @@ class _BBWPageState extends State<BBWPage> {
             alignment: Alignment.topLeft,
             width: double.infinity,
             height: double.infinity,
-            child: ((api.runtimeType != BBWApi)
-                ? const Center(
-                    child: CircularProgressIndicator(),
+            child: ((api.runtimeType != BBWApi || listItems.isEmpty)
+                ? Center(
+                    child: const Text(
+                      "Momentan sind keine Daten online",
+                      style: TextStyle(color: Colors.red),
+                    ),
                   )
-                : (listItems.length == 0)
-                    ? const Text(
-                        "Momentan sind keine Daten online",
-                        style: TextStyle(color: Colors.red),
-                      )
-                    : ListView(children: [
-                        Container(
-                          padding: const EdgeInsets.only(left: 20, right: 20),
-                          child: const Text(
-                            "Dieser Stundenplan zeigt die Zimmerbelegung aller Klassen des aktuellen Tages.",
-                            style: TextStyle(color: Colors.white),
-                          ),
+                : ListView(children: [
+                    Container(
+                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      child: const Text(
+                        "Dieser Stundenplan zeigt die Zimmerbelegung aller Klassen des aktuellen Tages.",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    Center(
+                      child: DropdownButton<String>(
+                        value: dropdownValue,
+                        icon: const Icon(Icons.arrow_downward),
+                        elevation: 16,
+                        style: const TextStyle(color: Colors.deepPurple),
+                        underline: Container(
+                          height: 2,
+                          color: Colors.deepPurpleAccent,
                         ),
-                        Center(
-                          child: DropdownButton<String>(
-                            value: dropdownValue,
-                            icon: const Icon(Icons.arrow_downward),
-                            elevation: 16,
-                            style: const TextStyle(color: Colors.deepPurple),
-                            underline: Container(
-                              height: 2,
-                              color: Colors.deepPurpleAccent,
-                            ),
-                            onChanged: (String? value) {
-                              selectClass(value!);
-                            },
-                            items: classNames
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                        ...listItems
-                      ]))),
+                        onChanged: (String? value) {
+                          selectClass(value!);
+                        },
+                        items: classNames
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                    ...listItems
+                  ]))),
         Positioned(
             top: 10,
             left: 0,
