@@ -468,7 +468,17 @@ class _HomePageState extends State<HomePage> {
                   ? const Center(
                       child: CircularProgressIndicator(),
                     )
-                  : ListView(children: [...listItems])),
+                  : ListView(children: [
+                      ListTile(
+                        title: Text(
+                          "Stundenplan von ${username.toString().split(".")[0].toUpperCase()}",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      ...listItems
+                    ])),
         ),
         Positioned(
             top: 10,

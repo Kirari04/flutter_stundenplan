@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/router.dart';
 
@@ -18,11 +20,13 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
         title: '2I Stundenplan',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
-          textTheme: const TextTheme(
-            subtitle1: TextStyle(color: Colors.white),
-          ),
-        ),
+            primarySwatch: Colors.blue,
+            textTheme: const TextTheme(
+              subtitle1: TextStyle(color: Colors.white),
+            ),
+            scrollbarTheme: ScrollbarThemeData().copyWith(
+              thumbColor: MaterialStateProperty.all(Colors.white),
+            )),
         home: const LocalRouter());
   }
 }
