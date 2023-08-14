@@ -40,16 +40,16 @@ class _HomePageState extends State<HomePage> {
 
   String? username = "";
   String? password = "";
+  String? school = "";
 
   Future<http.Response> fetchApi() {
-    return http.post(Uri.parse(data.api), body: <String, String>{
-      'username': username.toString(),
-      'password': password.toString()
-    });
-  }
-
-  Future<http.Response> fetchTeacherApi(int teacherId) {
-    return http.get(Uri.parse(data.teacherApi + teacherId.toString()));
+    school ??= "kbw";
+    print("School: $school");
+    return http.post(Uri.parse("${data.api}?school=$school"),
+        body: <String, String>{
+          'username': username.toString(),
+          'password': password.toString()
+        });
   }
 
   DateTime parseTime(String input, String date) => DateTime.parse(
@@ -100,6 +100,7 @@ class _HomePageState extends State<HomePage> {
     final prefs = await SharedPreferences.getInstance();
     final oldUsername = prefs.getString('username');
     final oldPassword = prefs.getString('password');
+    school = prefs.getString('school');
 
     final apiOldData = prefs.getString('apiData');
     setState(() {
@@ -140,7 +141,9 @@ class _HomePageState extends State<HomePage> {
       }
     } else {
       print("failed to fetch because of status code: " +
-          res.statusCode.toString());
+          res.statusCode.toString() +
+          " | " +
+          res.body.toString());
     }
     setState(() {
       isLoading = false;

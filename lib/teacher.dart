@@ -44,8 +44,9 @@ class _TeacherState extends State<Teacher> {
 
   _TeacherState(this.teacherId, this.title);
 
-  Future<http.Response> fetchTeacherApi(int teacherId) {
-    return http.get(Uri.parse(data.teacherApi + teacherId.toString()));
+  Future<http.Response> fetchTeacherApi(int teacherId, String? school) {
+    return http
+        .get(Uri.parse("${data.teacherApi}$teacherId&school=${school!}"));
   }
 
   DateTime parseTime(String input, String date) => DateTime.parse(
@@ -72,6 +73,7 @@ class _TeacherState extends State<Teacher> {
       isLoading = true;
     });
     final prefs = await SharedPreferences.getInstance();
+    final school = prefs.getString('school');
     final apiOldData = prefs.getString('apiDataTeacher$teacherId');
     if (apiOldData != null) {
       Api tmpCacheApi = Api.fromRawJson(apiOldData);
@@ -81,7 +83,7 @@ class _TeacherState extends State<Teacher> {
       });
     }
 
-    http.Response res = await fetchTeacherApi(teacherId);
+    http.Response res = await fetchTeacherApi(teacherId, school);
     if (res.statusCode == 200) {
       Api tmpApi = Api.fromRawJson(res.body);
       if (tmpApi.status == 1) {

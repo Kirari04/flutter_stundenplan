@@ -17,7 +17,7 @@ class Api {
     try {
       return Api.fromJson(json.decode(str));
     } catch (e) {
-      //print("Some error happened: " + e.toString());
+      print("Some error happened: $e");
       return Api(data: [], status: 0);
     }
   }
@@ -126,7 +126,7 @@ class Datum {
   String? message;
   String? output;
   String? title;
-  int? halfClassLesson;
+  String? halfClassLesson;
   int? courseId;
   String? courseName;
   String? course;
@@ -180,13 +180,13 @@ class Datum {
             : List<int>.from(json["blockId"].map((x) => x)),
         blockTeacherId: json["blockTeacherId"] == null
             ? null
-            : List<int>.from(json["blockTeacherId"].map((x) => x)),
+            : List<int?>.from(json["blockTeacherId"].map((x) => x)),
         blockClassId: json["blockClassId"] == null
             ? null
-            : List<int>.from(json["blockClassId"].map((x) => x)),
+            : List<int?>.from(json["blockClassId"].map((x) => x)),
         blockRoomId: json["blockRoomId"] == null
             ? null
-            : List<int>.from(json["blockRoomId"].map((x) => x)),
+            : List<int?>.from(json["blockRoomId"].map((x) => x)),
         modId: json["modId"],
         periodId: json["periodId"],
         start: json["start"],
@@ -219,38 +219,39 @@ class Datum {
         timegridId: json["timegridId"],
         classId: json["classId"] == null
             ? null
-            : List<int>.from(json["classId"].map((x) => x)),
+            : List<int?>.from(json["classId"].map((x) => x)),
         className: json["className"],
         profileId: json["profileId"],
         teamId: json["teamId"],
         teacherId: json["teacherId"] == null
             ? null
-            : List<int>.from(json["teacherId"].map((x) => x)),
+            : List<int?>.from(json["teacherId"].map((x) => x)),
         teacherAcronym: json["teacherAcronym"],
         teacherFullName: json["teacherFullName"] == null
             ? null
-            : List<String>.from(json["teacherFullName"].map((x) => x)),
+            : List<String?>.from(json["teacherFullName"].map((x) => x)),
         teacherLastname: json["teacherLastname"],
         teacherFirstname: json["teacherFirstname"],
         connectedTeacherId: json["connectedTeacherId"] == null
             ? null
-            : List<int>.from(json["connectedTeacherId"].map((x) => x)),
+            : List<int?>.from(json["connectedTeacherId"].map((x) => x)),
         connectedTeacherFullName: json["connectedTeacherFullName"] == null
             ? null
-            : List<String>.from(json["connectedTeacherFullName"].map((x) => x)),
+            : List<String?>.from(
+                json["connectedTeacherFullName"].map((x) => x)),
         student: json["student"] == null
             ? null
             : List<Student>.from(
                 json["student"].map((x) => Student.fromJson(x))),
         studentId: json["studentId"] == null
             ? null
-            : List<int>.from(json["studentId"].map((x) => x)),
+            : List<int?>.from(json["studentId"].map((x) => x)),
         studentFullName: json["studentFullName"],
         studentLastname: json["studentLastname"],
         studentFirstname: json["studentFirstname"],
         roomId: json["roomId"] == null
             ? null
-            : List<int>.from(json["roomId"].map((x) => x)),
+            : List<int?>.from(json["roomId"].map((x) => x)),
         roomName: json["roomName"],
         locationDescription: json["locationDescription"],
         resourceId: json["resourceId"] == null
@@ -263,14 +264,14 @@ class Datum {
         hasExamFiles: json["hasExamFiles"],
         privileges: json["privileges"] == null
             ? null
-            : List<String>.from(json["privileges"].map((x) => x)),
+            : List<String?>.from(json["privileges"].map((x) => x)),
         resource: json["resource"],
         reservedResources: json["reservedResources"],
         totalStock: json["totalStock"],
         school: json["school"],
         relatedId: json["relatedId"] == null
             ? null
-            : List<String>.from(json["relatedId"].map((x) => x)),
+            : List<String?>.from(json["relatedId"].map((x) => x)),
       );
 }
 
@@ -280,7 +281,7 @@ class Student {
     this.studentName,
   });
 
-  int studentId;
+  int? studentId;
   String? studentName;
 
   factory Student.fromRawJson(String str) => Student.fromJson(json.decode(str));

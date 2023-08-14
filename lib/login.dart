@@ -18,12 +18,13 @@ class _LoginState extends State<Login> {
   String? title;
   String? username = "";
   String? password = "";
+  String? school = "";
   String? errorMessage;
 
   DataSeed data = DataSeed();
 
   Future<http.Response> fetchLoginApi() {
-    return http.post(Uri.parse(data.api),
+    return http.post(Uri.parse("${data.api}?school=${school!}"),
         headers: <String, String>{},
         body: <String, String>{
           'username': username.toString(),
@@ -39,6 +40,7 @@ class _LoginState extends State<Login> {
       setState(() {
         username = prefs.getString('username');
         password = prefs.getString('password');
+        school = prefs.getString('school');
 
         if (username != "" &&
             password != "" &&
@@ -114,6 +116,26 @@ class _LoginState extends State<Login> {
                                 focusColor: Colors.white),
                           ),
                         ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: TextField(
+                            onChanged: (value) {
+                              school = value.toString();
+                            },
+                            enableSuggestions: true,
+                            autocorrect: false,
+                            style: const TextStyle(color: Colors.white),
+                            decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                  color: Colors.grey,
+                                )),
+                                labelStyle: TextStyle(color: Colors.white),
+                                labelText: 'Schule kürzel (leer = kbw)',
+                                focusColor: Colors.white),
+                          ),
+                        ),
                         errorMessage != null
                             ? Text(
                                 errorMessage.toString(),
@@ -168,6 +190,8 @@ class _LoginState extends State<Login> {
                                               'username', username.toString());
                                           prefs.setString(
                                               'password', password.toString());
+                                          prefs.setString(
+                                              'school', school.toString());
                                           setState(() {
                                             isAuth = true;
                                           });
