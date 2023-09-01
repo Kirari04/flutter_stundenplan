@@ -40,8 +40,8 @@ class _LocalRouterState extends State<LocalRouter> {
         name: 'Home',
         obj: const HomePage(),
         icon: Icons.home_rounded),
-    LocalRouterItem(
-        loc: '/bbw', name: 'BBW', obj: const BBWPage(), icon: Icons.computer),
+    // LocalRouterItem(
+    //     loc: '/bbw', name: 'BBW', obj: const BBWPage(), icon: Icons.computer),
     LocalRouterItem(
         loc: '/login', name: 'Login', obj: const Login(), icon: Icons.login),
     LocalRouterItem(
@@ -122,25 +122,23 @@ class _LocalRouterState extends State<LocalRouter> {
               child: VersionChecker(),
             ),
           ]),
-      bottomNavigationBar: new Theme(
+      bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(
           canvasColor: Colors.black54,
         ),
         child: BottomNavigationBar(
-            backgroundColor: Colors.grey,
+            // backgroundColor: Color.fromARGB(255, 12, 12, 12),
             currentIndex: index,
-            // unselectedItemColor: Colors.white,
+            unselectedItemColor: Colors.white,
             // selectedItemColor: Colors.white,
-            onTap: (newIndex) {
-              setState(() {
-                index = newIndex;
-              });
-            },
+            onTap: (newIndex) => setState(() {
+                  index = newIndex;
+                }),
             items: localRouter
                 .map((item) => BottomNavigationBarItem(
                     icon: Icon(
                       item.icon,
-                      color: Color.fromARGB(255, 255, 255, 255),
+                      color: const Color.fromARGB(255, 255, 255, 255),
                     ),
                     label: item.name))
                 .toList()),

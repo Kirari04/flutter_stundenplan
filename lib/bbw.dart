@@ -360,6 +360,13 @@ class _BBWPageState extends State<BBWPage> {
                     Container(
                       padding: const EdgeInsets.only(left: 20, right: 20),
                       child: const Text(
+                        "BBW Stundenplan aller Klassen.",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      child: const Text(
                         "Dieser Stundenplan zeigt die Zimmerbelegung aller Klassen des aktuellen Tages.",
                         style: TextStyle(color: Colors.white),
                       ),

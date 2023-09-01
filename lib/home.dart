@@ -115,7 +115,7 @@ class _HomePageState extends State<HomePage> {
     });
 
     //update cache only if loggedin
-    if (username != null && password != null) {
+    if (username != null && password != null && school != null) {
       updateApiData(prefs, apiOldData);
     }
   }
@@ -392,7 +392,7 @@ class _HomePageState extends State<HomePage> {
                         .toUpperCase();
                     return ElevatedButton(
                         onPressed: () {
-                          openTeacher(teacherId!, teachersFullName);
+                          // openTeacher(teacherId!, teachersFullName);
                         },
                         child: Row(
                           children: [

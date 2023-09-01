@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DataSeed {
-  String title = "2I Stundenplan";
+  String title = "Intranet Stundenplan";
 
   String api = "https://kbw.senpai.one/api/api.php";
   String teacherApi = "https://kbw.senpai.one/api/teacher.php?teacher=";
