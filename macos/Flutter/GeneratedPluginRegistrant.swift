@@ -7,7 +7,7 @@ import Foundation
 
 import desktop_window
 import path_provider_foundation
-import shared_preferences_macos
+import shared_preferences_foundation
 import url_launcher_macos
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
